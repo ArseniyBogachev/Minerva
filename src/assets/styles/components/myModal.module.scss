@@ -50,6 +50,20 @@
                         padding: 0 1%;
                     }
                 }
+                &__mandatory {
+                    margin-top: 5%;
+                    display: flex;
+                    align-items: center;
+                    &__title {
+                        display: block;
+                        font-size: 15px;
+                        font-family: "Montserrat", sans-serif
+                    }
+                    &__choice {
+                        display: block;
+                        margin-left: 10px;
+                    }
+                }
                 &__time {
                     margin-top: 5%;
                     span {

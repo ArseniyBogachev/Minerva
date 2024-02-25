@@ -12,6 +12,8 @@ const MyModal = ({
     listTypeAnswer,
     comment, 
     datetime,
+    mandatory,
+    setMandatory,
     setAnswer,
     setComment,
     setDatetime,
@@ -48,6 +50,10 @@ const MyModal = ({
                         <div className={classes.myModal__dialog__content__body__comment}>
                             <span className={classes.myModal__dialog__content__body__comment__title}>Комментарий</span>
                             <textarea className={classes.myModal__dialog__content__body__comment__text} value={comment} onChange={event => setComment(event.target.value)}></textarea>
+                        </div>
+                        <div className={classes.myModal__dialog__content__body__mandatory}>
+                            <span className={classes.myModal__dialog__content__body__mandatory__title}>Обязательный вопрос</span>
+                            <input className={classes.myModal__dialog__content__body__mandatory__choice} type="checkbox" checked={mandatory} onChange={() => setMandatory(!mandatory)}/>
                         </div>
                         <div className={classes.myModal__dialog__content__body__time}>
                             <span>Дедлайн выполнения</span>

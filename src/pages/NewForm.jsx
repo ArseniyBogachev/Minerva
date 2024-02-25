@@ -19,6 +19,7 @@ const NewForm = () => {
     const [answer, setAnswer] = useState("");
     const [comment, setComment] = useState("");
     const [datetime, setDatetime] = useState("");
+    const [mandatory, setMandatory] = useState(false);
     const [file, setFile] = useState([]);
     const [currentTypeAnswer, setCurrentTypeAnswer] = useState("");
 
@@ -48,6 +49,7 @@ const NewForm = () => {
         setDatetime("");
         setFile("");
         setCurrentTypeAnswer("");
+        setMandatory(false);
     }
 
     function editAnswerByForm(id) {       
@@ -57,17 +59,18 @@ const NewForm = () => {
         setDatetime(obj.datetime);
         setFile(obj.file);
         setCurrentTypeAnswer(obj.typeAnswer);
+        setMandatory(obj.mandatory)
         setStateModal(id);
     }
 
     function updateAnswerByForm() {
-        console.log(currentTypeAnswer)
         setNewForm(newForm.map(item => {
             if (item.id === stateModal) {
                 item.answer = answer;
                 item.comment = comment;
                 item.datetime = datetime;
                 item.file = file;
+                item.mandatory = mandatory;
                 item.typeAnswer = currentTypeAnswer;
             }
             return item
@@ -82,6 +85,7 @@ const NewForm = () => {
             typeAnswer: currentTypeAnswer,
             comment: comment,
             datetime: datetime,
+            mandatory: mandatory,
             file: file
         }]);
         cleanStates();
@@ -142,6 +146,7 @@ const NewForm = () => {
                         currentTypeAnswer={currentTypeAnswer} 
                         answer={answer}
                         comment={comment}
+                        mandatory={mandatory}
                         datetime={datetime}
                         file={file}
                         listTypeAnswer={listTypeAnswer}
@@ -149,6 +154,7 @@ const NewForm = () => {
                         setComment={setComment}
                         setDatetime={setDatetime}
                         setFile={setFile}
+                        setMandatory={setMandatory}
                         cleanStates={cleanStates}
                         saveStates={saveStates}
                         updateAnswerByForm={updateAnswerByForm}
