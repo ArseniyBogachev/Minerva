@@ -1,0 +1,71 @@
+.myModal {
+    &__dialog {
+        &__content {
+            &__header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 3%;
+                h5 {
+                    display: block;
+                }
+                select {
+                    display: block;
+                    font-size: 15px;
+                    font-family: "Montserrat", sans-serif;
+                    border: 1px solid rgb(200, 200, 200);
+                    padding: 5px;
+                }
+            }
+            &__body {
+                &__answer {
+                    &__title {
+                        display: block;
+                        font-size: 15px;
+                        font-family: "Montserrat", sans-serif;
+                    }
+                    &__text {
+                        display: block;
+                        font-family: "Montserrat", sans-serif;
+                        border: 1px solid rgb(200, 200, 200);
+                        width: 100%;
+                        padding: 0 1%;
+                    }
+                    &__file {
+                        margin-top: 10px;
+                    }
+                }
+                &__comment {
+                    margin-top: 5%;
+                    &__title {
+                        display: block;
+                        font-size: 15px;
+                        font-family: "Montserrat", sans-serif;
+                    }
+                    &__text {
+                        display: block;
+                        font-family: "Montserrat", sans-serif;
+                        border: 1px solid rgb(200, 200, 200);
+                        width: 100%;
+                        padding: 0 1%;
+                    }
+                }
+                &__time {
+                    margin-top: 5%;
+                    span {
+                        display: block;
+                        font-size: 15px;
+                        font-family: "Montserrat", sans-serif;
+                    }
+                    input {
+                        display: block;
+                        font-size: 15px;
+                        font-family: "Montserrat", sans-serif;
+                        border: 1px solid rgb(200, 200, 200);
+                        padding: 1%;
+                    }
+                }
+            }
+        }
+    }
+}

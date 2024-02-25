@@ -1,6 +1,12 @@
 .main {
+    height: 100%;
     button {
         font-size: 15px;
-        padding: 10%;
+        height: 100%;
+        padding: .40em 1.2rem;
+        color: white;
+        background-color: rgb(150, 209, 158);
+        border-radius: 5px;
+        font-family: "Montserrat", sans-serif;
     }
 }

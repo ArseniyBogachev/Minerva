@@ -1,10 +1,17 @@
 import React from "react";
 import classes from "../assets/styles/components/myButton.module.scss"
 
-const MyButton = () => {
+const MyButton = (props) => {
+
     return (
         <div className={classes.main}>
-            <button type="button">Создать</button>
+            <button 
+                type="button"
+                class={props.class} 
+                onClick={props.click}
+                style={{backgroundColor: props.backgroundColor, ...props.otherStyle}}>
+                    {props.text}
+            </button>
         </div>
     )
 }

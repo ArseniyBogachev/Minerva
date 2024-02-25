@@ -7,17 +7,71 @@
 .wrapper {
     width: 100%;
     height: 100%;
-    border: 1px solid red;
 }
 
 .panel {
     width: 100%;
-    height: 30px;
+    height: 10%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 5%;
 }
 
 .listForms {
-
+    box-shadow: 0 0 5px 1px rgb(200, 200, 200);
+    border-radius: 5px;
+    margin-top: 5%;
+    height: 70%;
+    width: 100%;
+    &__columns {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 15%;
+        width: 100%;
+        border-bottom: 1px solid rgb(220, 220, 220);
+        &__item {
+            font-size: 15px;
+            font-family: "Montserrat", sans-serif;
+        }
+    }
+    &__forms {
+        width: 100%;
+        height: 85%;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            width: 7px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: rgb(200, 200, 200);
+        }
+        &__item {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 25%;
+            width: 100%;
+            font-family: "Montserrat", sans-serif;
+            &:hover {
+                background-color: rgba(240, 240, 240, 0.8);
+            }
+            &__title {
+                width: 33.3%;
+                text-align: center;
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+            &__answers  {
+                width: 33.3%;
+                text-align: center;
+            }
+            &__update {
+                width: 33.3%;
+                text-align: center;
+            }
+        }
+    }
 }
