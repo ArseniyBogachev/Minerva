@@ -5,7 +5,6 @@ const path = require('path');
 module.exports = (env) => {
 
     const isDev = env.mode === 'development';
-    console.log(env.mode ?? 'development', isDev ? 'style-loader' : 'Mini')
 
     const cssLoader = {
         loader: "css-loader",
@@ -18,9 +17,16 @@ module.exports = (env) => {
 
     const config = {
         mode: env.mode ?? 'development',
+        performance: {
+            hints: false,
+            maxEntrypointSize: 512000,
+            maxAssetSize: 512000
+        },
         entry: './src/index.js',
         output: {
-            filename: '[name].[contenthash].js',
+            // filename: '[name].[contenthash].js',
+            filename: 'bundle.js',
+            publicPath: '/',
             path: path.resolve(__dirname, 'dist'),
             clean: true
         },

@@ -50,6 +50,31 @@
                         padding: 0 1%;
                     }
                 }
+                &__answerOptions {
+                    margin-top: 5%;
+                    &__title {
+                        display: block;
+                        font-size: 15px;
+                        font-family: "Montserrat", sans-serif;
+                    }
+                    &__list{
+                        margin: 5px 0;
+                        &__answer {
+                            display: block;
+                            margin-top: 4px;
+                            font-size: 12px;
+                            font-family: "Montserrat", sans-serif;
+                        }
+                    }
+                    &__text {
+                        display: block;
+                        font-family: "Montserrat", sans-serif;
+                        border: 1px solid rgb(200, 200, 200);
+                        width: 100%;
+                        padding: 0 1%;
+                        margin-bottom: 10px;
+                    }
+                }
                 &__mandatory {
                     margin-top: 5%;
                     display: flex;

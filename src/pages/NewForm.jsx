@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import classes from "../assets/styles/newForm.module.scss";
 import MyButton from "../components/MyButton.jsx";
-import MyModal from "../components/MyModal.jsx";
+import AnswerModal from "../components/AnswerModal.jsx";
+import PreviewModal from "../components/PreviewModal.jsx"
 import { FormsData } from "../context";
 
 const NewForm = () => {
@@ -20,8 +21,10 @@ const NewForm = () => {
     const [comment, setComment] = useState("");
     const [datetime, setDatetime] = useState("");
     const [mandatory, setMandatory] = useState(false);
+    const [optionAnswer, setOptionAnswer] = useState([]);
     const [file, setFile] = useState([]);
     const [currentTypeAnswer, setCurrentTypeAnswer] = useState("");
+    const [currentOptionAnswer, setCurrentOptionAnswer] = useState("");
 
     const [newForm, setNewForm] = useState(location.state ? location.state.data : []);
 
@@ -47,9 +50,19 @@ const NewForm = () => {
         setAnswer("");
         setComment("");
         setDatetime("");
-        setFile("");
+        setOptionAnswer([])
+        setFile([]);
         setCurrentTypeAnswer("");
+        setCurrentOptionAnswer("")
         setMandatory(false);
+    }
+
+    function addOptionAnswer(text) {
+        setOptionAnswer([...optionAnswer, {
+            id: nextID(optionAnswer),
+            text: currentOptionAnswer
+        }]);
+        setCurrentOptionAnswer("");
     }
 
     function editAnswerByForm(id) {       
@@ -59,7 +72,8 @@ const NewForm = () => {
         setDatetime(obj.datetime);
         setFile(obj.file);
         setCurrentTypeAnswer(obj.typeAnswer);
-        setMandatory(obj.mandatory)
+        setOptionAnswer(obj.optionAnswer);
+        setMandatory(obj.mandatory);
         setStateModal(id);
     }
 
@@ -71,6 +85,7 @@ const NewForm = () => {
                 item.datetime = datetime;
                 item.file = file;
                 item.mandatory = mandatory;
+                item.optionAnswer = optionAnswer;
                 item.typeAnswer = currentTypeAnswer;
             }
             return item
@@ -86,6 +101,7 @@ const NewForm = () => {
             comment: comment,
             datetime: datetime,
             mandatory: mandatory,
+            optionAnswer: optionAnswer,
             file: file
         }]);
         cleanStates();
@@ -126,37 +142,44 @@ const NewForm = () => {
             <div className={classes.wrapper}>
                 <div className={classes.header}> 
                     <div className={classes.header__listBtn}>
+                        <MyButton text={'Предпросмотр'} backgroundColor={'rgb(225, 225, 225)'} toggle={"modal"} target={"#previewModal"}/>
                         <MyButton text={'Опубликовать'} click={location.state ? updateFormByForms : saveForm}/>
-                        <MyButton text={<i class="fa-solid fa-ellipsis-vertical"></i>} click={() => console.log(newForm)} backgroundColor={'rgb(225, 225, 225)'}/>
                     </div>                   
                 </div>
                 <div className={classes.content}>
                     <div className={classes.content__listQuestion}>
                         <div className={classes.content__listQuestion__list}>
                             {listTypeAnswer.map((item, i) =>
-                                <div className={classes.content__listQuestion__list__item} data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setCurrentTypeAnswer(item.id)} key={i}>
+                                <div className={classes.content__listQuestion__list__item} data-bs-toggle="modal" data-bs-target="#answerModal" onClick={() => setCurrentTypeAnswer(item.id)} key={i}>
                                     <span>{item.text}</span>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <MyModal 
+                    <PreviewModal />
+
+                    <AnswerModal 
                         stateModal={stateModal}
                         currentTypeAnswer={currentTypeAnswer} 
                         answer={answer}
                         comment={comment}
                         mandatory={mandatory}
+                        optionAnswer={optionAnswer}
+                        setOptionAnswer={setOptionAnswer}
                         datetime={datetime}
                         file={file}
+                        currentOptionAnswer={currentOptionAnswer}
                         listTypeAnswer={listTypeAnswer}
                         setAnswer={setAnswer}
                         setComment={setComment}
                         setDatetime={setDatetime}
                         setFile={setFile}
+                        setCurrentOptionAnswer={setCurrentOptionAnswer}
                         setMandatory={setMandatory}
                         cleanStates={cleanStates}
                         saveStates={saveStates}
+                        addOptionAnswer={addOptionAnswer}
                         updateAnswerByForm={updateAnswerByForm}
                         setCurrentTypeAnswer={setCurrentTypeAnswer}/>
 
@@ -182,7 +205,7 @@ const NewForm = () => {
                                             setDropElem(Number(event.target.id))
                                         }
                                     }}
-                                    onDrop={(event) => {                                       
+                                    onDrop={() => {                                       
                                         const currentElem = newForm[dragElem]
                                         const tNewForm = [...newForm]
                                         if (dragElem > dropElem) {

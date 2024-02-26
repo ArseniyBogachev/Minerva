@@ -21,7 +21,7 @@ const Forms = () => {
             .then((r) => {
                 console.log(r); 
                 setStateLoading(false);
-                navigate("/new");
+                navigate("/forms/edit");
             }
         )
     }

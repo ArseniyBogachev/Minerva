@@ -1,7 +1,8 @@
 import React from "react";
-import classes from "../assets/styles/components/myModal.module.scss";
+import classes from "../assets/styles/components/answerModal.module.scss";
+import MyButton from "./MyButton.jsx"
 
-const MyModal = ({
+const AnswerModal = ({
     cleanStates, 
     currentTypeAnswer, 
     updateAnswerByForm,
@@ -10,10 +11,15 @@ const MyModal = ({
     answer, 
     file,
     listTypeAnswer,
+    optionAnswer,
+    setOptionAnswer,
+    currentOptionAnswer,
+    setCurrentOptionAnswer,
     comment, 
     datetime,
     mandatory,
     setMandatory,
+    addOptionAnswer,
     setAnswer,
     setComment,
     setDatetime,
@@ -23,7 +29,7 @@ const MyModal = ({
     
 
     return (
-        <div class="modal fade myModal" className={classes.myModal} id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal fade myModal" className={classes.myModal} id="answerModal" tabIndex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
             <div class="modal-dialog myModal__dialog" className={classes.myModal__dialog}>
                 <div class="modal-content" className={classes.myModal__dialog__content}>
                     <div class="modal-header" className={classes.myModal__dialog__content__header}>
@@ -51,6 +57,24 @@ const MyModal = ({
                             <span className={classes.myModal__dialog__content__body__comment__title}>Комментарий</span>
                             <textarea className={classes.myModal__dialog__content__body__comment__text} value={comment} onChange={event => setComment(event.target.value)}></textarea>
                         </div>
+                        {[3, 4, 5].find(item => item === currentTypeAnswer) ? <div className={classes.myModal__dialog__content__body__answerOptions}>
+                            <span className={classes.myModal__dialog__content__body__answerOptions__title}>Варианты ответа</span>
+                            <div className={classes.myModal__dialog__content__body__answerOptions__list}>
+                                {optionAnswer.map((item, i) => 
+                                    <span key={i} className={classes.myModal__dialog__content__body__answerOptions__list__answer}>{item.id}) {item.text}</span>
+                                )}
+                            </div>
+                            <input 
+                                type="text" 
+                                className={classes.myModal__dialog__content__body__answerOptions__text} 
+                                value={currentOptionAnswer} 
+                                onChange={event => setCurrentOptionAnswer(event.target.value)}/>
+                            <MyButton 
+                                text={'Добавить'} 
+                                click={addOptionAnswer}
+                                backgroundColor={'rgb(200, 200, 200)'} 
+                                otherStyle={{padding: '1% 2%'}}/>
+                        </div> : <div></div>}
                         <div className={classes.myModal__dialog__content__body__mandatory}>
                             <span className={classes.myModal__dialog__content__body__mandatory__title}>Обязательный вопрос</span>
                             <input className={classes.myModal__dialog__content__body__mandatory__choice} type="checkbox" checked={mandatory} onChange={() => setMandatory(!mandatory)}/>
@@ -70,4 +94,4 @@ const MyModal = ({
     )
 }
 
-export default MyModal;
+export default AnswerModal;

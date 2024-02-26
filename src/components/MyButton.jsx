@@ -9,6 +9,9 @@ const MyButton = (props) => {
                 type="button"
                 class={props.class} 
                 onClick={props.click}
+                data-bs-target={props.target}
+                data-bs-toggle={props.toggle}
+                data-bs-dismiss={props.dismiss}
                 style={{backgroundColor: props.backgroundColor, ...props.otherStyle}}>
                     {props.text}
             </button>

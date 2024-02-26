@@ -1,0 +1,20 @@
+.myModal {
+    &__dialog {
+        &__content {
+            // padding: 2%;
+            &__header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 2%;
+                h5 {
+                    font-size: 17px;
+                }
+                i {
+                    cursor: pointer;
+                    font-size: 17px;
+                }
+            }
+        }
+    }
+}

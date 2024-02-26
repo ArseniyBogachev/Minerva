@@ -14,7 +14,7 @@ const router = createBrowserRouter([
         element: <Forms/>,
     },
     {
-        path: '/new',
+        path: '/forms/edit/',
         element: <NewForm/>
     }
 ]);
