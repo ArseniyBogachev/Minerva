@@ -5,6 +5,7 @@ import MyButton from "../components/MyButton.jsx";
 import AnswerModal from "../components/AnswerModal.jsx";
 import PreviewModal from "../components/PreviewModal.jsx"
 import { FormsData } from "../context";
+import InputText from "../components/typeAnswer/InputText.jsx"
 
 const NewForm = () => {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const NewForm = () => {
     const nextID = (list) => {
         return list.length ? list.at(-1).id + 1 : 1
     };
-    const [answer, setAnswer] = useState("");
+    const [question, setQuestion] = useState("");
     const [comment, setComment] = useState("");
     const [datetime, setDatetime] = useState("");
     const [mandatory, setMandatory] = useState(false);
@@ -31,14 +32,14 @@ const NewForm = () => {
     const [stateModal, setStateModal] = useState(false)
 
     const [listTypeAnswer, setListTypeAnswer] = useState([
-        {id: 1, text: 'Краткий ответ'},
-        {id: 2, text: 'Расширенный ответ'},
-        {id: 3, text: 'Выбор из вариантов'},
-        {id: 4, text: 'Множественный выбор'},
-        {id: 5, text: 'Выпадающий список'},
-        {id: 6, text: 'Да/Нет'},
-        {id: 7, text: 'Файл'},
-        {id: 8, text: 'Дата'}
+        {id: 1, text: 'Краткий ответ', typeTag: InputText},
+        {id: 2, text: 'Расширенный ответ', typeTag: InputText},
+        {id: 3, text: 'Выбор из вариантов', typeTag: InputText},
+        {id: 4, text: 'Множественный выбор', typeTag: InputText},
+        {id: 5, text: 'Выпадающий список', typeTag: InputText},
+        {id: 6, text: 'Да/Нет', typeTag: InputText},
+        {id: 7, text: 'Файл', typeTag: InputText},
+        {id: 8, text: 'Дата', typeTag: InputText}
     ]);
 
     function removeAnswerByForm(id) {
@@ -47,7 +48,7 @@ const NewForm = () => {
 
     function cleanStates() {
         setStateModal(false)
-        setAnswer("");
+        setQuestion("");
         setComment("");
         setDatetime("");
         setOptionAnswer([])
@@ -67,7 +68,7 @@ const NewForm = () => {
 
     function editAnswerByForm(id) {       
         const obj = newForm.find(item => item.id === id);
-        setAnswer(obj.answer);
+        setQuestion(obj.question);
         setComment(obj.comment);
         setDatetime(obj.datetime);
         setFile(obj.file);
@@ -80,7 +81,7 @@ const NewForm = () => {
     function updateAnswerByForm() {
         setNewForm(newForm.map(item => {
             if (item.id === stateModal) {
-                item.answer = answer;
+                item.question = question;
                 item.comment = comment;
                 item.datetime = datetime;
                 item.file = file;
@@ -96,7 +97,7 @@ const NewForm = () => {
     function saveStates() {
         setNewForm([...newForm, {
             id: nextID(newForm),
-            answer: answer,
+            question: question,
             typeAnswer: currentTypeAnswer,
             comment: comment,
             datetime: datetime,
@@ -157,12 +158,12 @@ const NewForm = () => {
                         </div>
                     </div>
 
-                    <PreviewModal />
+                    <PreviewModal newForm={newForm} listTypeAnswer={listTypeAnswer}/>
 
                     <AnswerModal 
                         stateModal={stateModal}
                         currentTypeAnswer={currentTypeAnswer} 
-                        answer={answer}
+                        question={question}
                         comment={comment}
                         mandatory={mandatory}
                         optionAnswer={optionAnswer}
@@ -171,7 +172,7 @@ const NewForm = () => {
                         file={file}
                         currentOptionAnswer={currentOptionAnswer}
                         listTypeAnswer={listTypeAnswer}
-                        setAnswer={setAnswer}
+                        setQuestion={setQuestion}
                         setComment={setComment}
                         setDatetime={setDatetime}
                         setFile={setFile}
@@ -220,7 +221,7 @@ const NewForm = () => {
                                     }}
                                 >
                                     <div className={classes.content__newForm__list__item__answer}>
-                                        <span>{item.answer}</span>
+                                        <span>{item.question}</span>
                                         <span>{listTypeAnswer.map(typeItem => {
                                             if (typeItem.id === item.typeAnswer) {
                                                 return typeItem.text
@@ -228,7 +229,7 @@ const NewForm = () => {
                                         })}</span>
                                     </div>
                                     <div className={classes.content__newForm__list__item__btn}>
-                                        <i class="fa-solid fa-pen" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {editAnswerByForm(item.id)}}></i>
+                                        <i class="fa-solid fa-pen" data-bs-toggle="modal" data-bs-target="#answerModal" onClick={() => {editAnswerByForm(item.id)}}></i>
                                         <i class="fa-solid fa-trash" onClick={() => removeAnswerByForm(item.id)}></i>
                                     </div>
                                 </div>

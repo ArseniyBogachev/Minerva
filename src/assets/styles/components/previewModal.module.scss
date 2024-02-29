@@ -1,5 +1,7 @@
 .myModal {
+
     &__dialog {
+        
         &__content {
             // padding: 2%;
             &__header {
@@ -13,6 +15,28 @@
                 i {
                     cursor: pointer;
                     font-size: 17px;
+                }
+            }
+            &__body {
+                padding: 0;
+                &__item {
+                    padding: 10px 20px;
+                    border-top: 1px solid rgb(200, 200, 200);
+                    &__question {
+                        &__text {
+                            font-size: 15px;
+                            font-family: "Montserrat", sans-serif;
+                        }
+                        &__comment {
+                            font-size: 11px;
+                            font-family: "Montserrat", sans-serif;
+                            font-style: italic;
+                            color: rgb(200, 200, 200);
+                        }
+                    }
+                    &__answer {
+
+                    }
                 }
             }
         }

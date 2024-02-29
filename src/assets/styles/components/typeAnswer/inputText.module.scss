@@ -1,0 +1,14 @@
+.main {
+    width: 100%;
+    input {
+        width: 100%;
+        font-size: 15px;
+        font-family: "Montserrat", sans-serif;
+        border: 1px solid rgb(200, 200, 200);
+        color: rgb(50, 50, 50);
+        padding: 1%;
+        &::placeholder {
+            color: rgb(200, 200, 200);
+        }
+    }
+}

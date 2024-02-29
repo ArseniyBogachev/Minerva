@@ -8,7 +8,7 @@ const AnswerModal = ({
     updateAnswerByForm,
     stateModal,
     saveStates, 
-    answer, 
+    question, 
     file,
     listTypeAnswer,
     optionAnswer,
@@ -20,7 +20,7 @@ const AnswerModal = ({
     mandatory,
     setMandatory,
     addOptionAnswer,
-    setAnswer,
+    setQuestion,
     setComment,
     setDatetime,
     setCurrentTypeAnswer,
@@ -43,7 +43,7 @@ const AnswerModal = ({
                     <div class="modal-body" className={classes.myModal__dialog__content__body}>
                         <div className={classes.myModal__dialog__content__body__answer}>
                             <span className={classes.myModal__dialog__content__body__answer__title}>Вопрос</span>
-                            <textarea className={classes.myModal__dialog__content__body__answer__text} value={answer} onChange={event => setAnswer(event.target.value)}></textarea>
+                            <textarea className={classes.myModal__dialog__content__body__answer__text} value={question} onChange={event => setQuestion(event.target.value)}></textarea>
                             <input 
                                 type="file" 
                                 multiple 
