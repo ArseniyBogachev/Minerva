@@ -4,7 +4,7 @@ import classes from "../../assets/styles/components/typeAnswer/inputText.module.
 const InputText = (props) => {
     return (
         <div className={classes.main}>
-            <input type="text" placeholder={"Ответ"}/>
+            <input type="text" placeholder={"Ответ..."}/>
         </div>
     )
 }

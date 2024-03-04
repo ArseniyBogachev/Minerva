@@ -2,6 +2,9 @@ import React from "react";
 import classes from "../assets/styles/components/previewModal.module.scss";
 
 const PreviewModal = ({newForm, listTypeAnswer}) => {
+    // const [file, setFile] = useState('');
+    // const [value, setValue] = useState('');
+
     return (
         <div class="modal fade modal-lg" className={classes.myModal} id="previewModal" tabIndex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
             <div class="modal-dialog" className={classes.myModal__dialog}>
@@ -19,7 +22,7 @@ const PreviewModal = ({newForm, listTypeAnswer}) => {
                                 </div>
                                 <div className={classes.myModal__dialog__content__body__item__answer}>
                                     {
-                                        listTypeAnswer.find(type => type.id === item.typeAnswer).typeTag({text: '55555'})
+                                        listTypeAnswer.find(type => type.id === item.typeAnswer).typeTag({postfix: i, answers: item.optionAnswer})
                                     }
                                 </div>
                             </div>
