@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from "react-router-dom";
 import Forms from '../pages/Forms.jsx';
-import EnterAccount from "../pages/EnterAccount.jsx"
+import EnterAccount from "../pages/EnterAccount.jsx";
 import NewForm from '../pages/NewForm.jsx';
 import Home from "../pages/Home.jsx";
 import App from "../App.jsx";

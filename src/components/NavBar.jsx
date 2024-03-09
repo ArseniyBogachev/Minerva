@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import classes from "../assets/styles/components/navbar.module.scss"
 
-const NavBar = ({navigate}) => {
-    const [auth, setAuth] = useState(true);
-
+const NavBar = ({navigate, auth, setAuth}) => {
     return (
         <div className={classes.main}>
             <div className={classes.wrapper}>
@@ -18,7 +16,7 @@ const NavBar = ({navigate}) => {
                 <div className={classes.profile}>
                     {auth ? 
                     <div className={classes.profile__authorized}>
-                        <span onClick={() => navigate("/profile")}>Профиль</span>
+                        <span onClick={() => navigate("/profile")}>Профиль ({auth.name})</span>
                     </div> : 
                     <div className={classes.profile__nonAuthorized}>
                         <span onClick={() => navigate("/enter")}>Вход <i class="fa-solid fa-arrow-right-to-bracket"></i></span>       
