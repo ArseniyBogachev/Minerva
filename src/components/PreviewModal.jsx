@@ -1,10 +1,8 @@
 import React from "react";
 import classes from "../assets/styles/components/previewModal.module.scss";
+import GeneratingFormFields from "./GeneratingFormFields.jsx";
 
 const PreviewModal = ({newForm, listTypeAnswer}) => {
-    // const [file, setFile] = useState('');
-    // const [value, setValue] = useState('');
-
     return (
         <div class="modal fade modal-lg" className={classes.myModal} id="previewModal" tabIndex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
             <div class="modal-dialog" className={classes.myModal__dialog}>
@@ -14,19 +12,7 @@ const PreviewModal = ({newForm, listTypeAnswer}) => {
                         <i class="fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close"></i>
                     </div>
                     <div class="modal-body" className={classes.myModal__dialog__content__body}>
-                        {newForm.map((item, i) => 
-                            <div className={classes.myModal__dialog__content__body__item} key={i}>
-                                <div className={classes.myModal__dialog__content__body__item__question}>
-                                    <p className={classes.myModal__dialog__content__body__item__question__text}>{i + 1}) {item.question}</p>
-                                    <p className={classes.myModal__dialog__content__body__item__question__comment}>{item.comment}</p>
-                                </div>
-                                <div className={classes.myModal__dialog__content__body__item__answer}>
-                                    {
-                                        listTypeAnswer.find(type => type.id === item.typeAnswer).typeTag({postfix: i, answers: item.optionAnswer})
-                                    }
-                                </div>
-                            </div>
-                        )} 
+                        <GeneratingFormFields newForm={newForm} listTypeAnswer={listTypeAnswer}/>
                     </div>
                     <div class="modal-footer" className={classes.myModal__dialog__content__footer}>
 

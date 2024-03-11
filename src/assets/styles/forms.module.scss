@@ -53,6 +53,7 @@
             height: 25%;
             width: 100%;
             font-family: "Montserrat", sans-serif;
+            position: relative;
             &:hover {
                 background-color: rgba(240, 240, 240, 0.8);
             }
@@ -71,6 +72,13 @@
             &__update {
                 width: 33.3%;
                 text-align: center;
+            }
+            i {
+                position: absolute;
+                font-size: 15px;
+                right: 30px;
+                top: calc(50% - 7px);
+                cursor: pointer;
             }
         }
     }

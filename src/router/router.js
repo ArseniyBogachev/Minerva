@@ -6,6 +6,7 @@ import NewForm from '../pages/NewForm.jsx';
 import Home from "../pages/Home.jsx";
 import App from "../App.jsx";
 import Profile from "../pages/Profile.jsx";
+import ViewForm from "../pages/ViewForm.jsx";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path: '/profile',
                 element: <Profile/>
+            },
+            {
+                path: '/forms/:formId',
+                element: <ViewForm/>
             }
         ]
     }

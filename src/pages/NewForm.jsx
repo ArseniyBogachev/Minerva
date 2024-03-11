@@ -4,15 +4,7 @@ import classes from "../assets/styles/newForm.module.scss";
 import MyButton from "../components/MyButton.jsx";
 import AnswerModal from "../components/AnswerModal.jsx";
 import PreviewModal from "../components/PreviewModal.jsx"
-import { FormsData } from "../context";
-import InputText from "../components/typeAnswer/InputText.jsx"
-import TextArea from "../components/typeAnswer/TextArea.jsx";
-import YesNo from "../components/typeAnswer/YesNo.jsx"
-import InputDate from "../components/typeAnswer/InputDate.jsx";
-import InputMultipleRadio from "../components/typeAnswer/InputMultipleRadio.jsx";
-import InputRadio from "../components/typeAnswer/InputRadio.jsx";
-import DropDownList from "../components/typeAnswer/DropDownList.jsx";
-import InputFile from "../components/typeAnswer/InputFile.jsx";
+import { FormsData, TypeAnswerData } from "../context";
 
 const NewForm = () => {
     const navigate = useNavigate();
@@ -21,6 +13,7 @@ const NewForm = () => {
     const [dropElem, setDropElem] = useState(null);
     
     const {forms, setForms} = useContext(FormsData);
+    const {listTypeAnswer, setListTypeAnswer} = useContext(TypeAnswerData);
 
     const nextID = (list) => {
         return list.length ? list.at(-1).id + 1 : 1
@@ -37,17 +30,6 @@ const NewForm = () => {
     const [newForm, setNewForm] = useState(location.state ? location.state.data : []);
 
     const [stateModal, setStateModal] = useState(false)
-
-    const [listTypeAnswer, setListTypeAnswer] = useState([
-        {id: 1, text: 'Краткий ответ', typeTag: InputText},
-        {id: 2, text: 'Расширенный ответ', typeTag: TextArea},
-        {id: 3, text: 'Выбор из вариантов', typeTag: InputRadio},
-        {id: 4, text: 'Множественный выбор', typeTag: InputMultipleRadio},
-        {id: 5, text: 'Выпадающий список', typeTag: DropDownList},
-        {id: 6, text: 'Да/Нет', typeTag: YesNo},
-        {id: 7, text: 'Файл', typeTag: InputFile},
-        {id: 8, text: 'Дата', typeTag: InputDate}
-    ]);
 
     function removeAnswerByForm(id) {
         setNewForm([...newForm.filter(item => item.id !== id)]); 

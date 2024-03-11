@@ -8,7 +8,7 @@ import { FormsData } from "../context";
 const Forms = () => {
     const navigate = useNavigate()
     const {forms, setForms} = useContext(FormsData);
-    const [stateLoading, setStateLoading] = useState(false)
+    const [stateLoading, setStateLoading] = useState(false);
 
     const response = ms => {
         return new Promise(r => setTimeout(() => r('response end'), ms))
@@ -27,7 +27,7 @@ const Forms = () => {
     }
 
     function editForm(item) {
-        navigate("/new", { 
+        navigate("/forms/edit", { 
             state: {
                 id: item.id,
                 data: item.listAnswer
@@ -58,6 +58,11 @@ const Forms = () => {
                                 <div className={classes.listForms__forms__item__title} onClick={() => editForm(item)}>{item.title}</div>
                                 <div className={classes.listForms__forms__item__answers}>{item.answers}</div>
                                 <div className={classes.listForms__forms__item__update}>{item.update}</div>
+                                <i class="fa-solid fa-ellipsis-vertical" id="action" data-bs-toggle="dropdown"></i>
+                                <ul class="dropdown-menu" aria-labelledby="action">
+                                    <li><a class="dropdown-item" onClick={() => navigate(`/forms/${item.id}/`)}>Открыть</a></li>
+                                    <li><a class="dropdown-item" onClick={() => navigator.clipboard.writeText(`http://localhost:3000/forms/${item.id}/`)}>Скопировать ссылку</a></li>
+                                </ul>
                             </div>
                         )}
                     </div>
