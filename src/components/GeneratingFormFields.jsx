@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classes from "../assets/styles/generatingFormFields.module.scss";
 
-const GeneratingFormFields = ({newForm, listTypeAnswer}) => {
+const GeneratingFormFields = ({newForm, listTypeAnswer, answers, updateAnswersForm}) => {
     return (
         newForm.map((item, i) => 
             <div className={classes.item} key={i}>
@@ -11,7 +11,13 @@ const GeneratingFormFields = ({newForm, listTypeAnswer}) => {
                 </div>
                 <div className={classes.item__answer}>
                     {
-                        listTypeAnswer.find(type => type.id === item.typeAnswer).typeTag({postfix: i, answers: item.optionAnswer})
+                        listTypeAnswer.find(type => type.id === item.typeAnswer).typeTag({
+                            postfix: i, 
+                            optionAnswer: item.optionAnswer, 
+                            answers: answers ? answers : false, 
+                            id: i,
+                            updateAnswersForm: updateAnswersForm ? updateAnswersForm : false
+                        })
                     }
                 </div>
             </div>

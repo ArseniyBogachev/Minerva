@@ -4,7 +4,7 @@ import classes from "../../assets/styles/components/typeAnswer/inputMultiple.mod
 const InputMultipleRadio = (props) => {
     return (
         <div className={classes.main}>
-            {props.answers.map((item, i) => 
+            {props.optionAnswer.map((item, i) => 
                 <div class="form-check" key={i}>
                     <input class="form-check-input" type="checkbox" name={`inputMultiple_${props.postfix}`} id={`inputMultiple_${props.postfix}`}/>
                     <label class="form-check-label" for={`inputMultiple_${props.postfix}`}>{item.text}</label>

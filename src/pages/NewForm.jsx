@@ -102,7 +102,7 @@ const NewForm = () => {
             forms.map(item => {
                 if (item.id === location.state.id) {
                     item.title = 'Новая форма',
-                    item.answers = 'Без изменений',
+                    item.datetime = 'Без изменений',
                     item.update = '01/01/24',
                     item.listAnswer = newForm                
                 }
@@ -118,9 +118,10 @@ const NewForm = () => {
             [...forms, {
                 id: nextID(forms),
                 title: 'Новая форма',
-                answers: 'Без изменений',
+                datetime: 'Без изменений',
                 update: '01/01/24',
-                listAnswer: newForm
+                listAnswer: newForm,
+                answers: []
             }]
         );
         cleanStates();

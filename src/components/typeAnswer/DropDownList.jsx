@@ -10,7 +10,7 @@ const DropDownList = (props) => {
                 )}
             </select> */}
             <select>
-                {props.answers.map((item, i) => 
+                {props.optionAnswer.map((item, i) => 
                     <option value={item.id} key={i}>{item.text}</option>
                 )}
             </select>
