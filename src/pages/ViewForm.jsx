@@ -51,7 +51,7 @@ const ViewForm = () => {
                 </div>
                 <div className={classes.footer}>
                     <MyButton text={"Отправить"}/>
-                    <MyButton text={"Отмена"} backgroundColor={"rgb(180, 180, 180)"} click={() => console.log(answers)}/>
+                    <MyButton text={"Отмена"} backgroundColor={"rgb(180, 180, 180)"} click={() => {}}/>
                 </div>                 
             </div> :
             <div className={classes.wrapper}>

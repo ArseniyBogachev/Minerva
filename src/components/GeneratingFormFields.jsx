@@ -15,7 +15,6 @@ const GeneratingFormFields = ({newForm, listTypeAnswer, answers, updateAnswersFo
                             postfix: i, 
                             optionAnswer: item.optionAnswer, 
                             answers: answers ? answers : false, 
-                            id: i,
                             updateAnswersForm: updateAnswersForm ? updateAnswersForm : false
                         })
                     }

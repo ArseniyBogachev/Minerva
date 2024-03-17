@@ -1,21 +1,21 @@
 import React from "react";
 import classes from "../../assets/styles/components/typeAnswer/inputRadio.module.scss"
 
-const InputRadio = (props) => {
+const InputRadio = ({postfix, optionAnswer, answers, updateAnswersForm}) => {
     return (
         <div className={classes.main}>
-            {props.optionAnswer.map((item, i) => 
+            {optionAnswer.map((item, i) => 
                 <div class="form-check" key={i}>
                     <input 
                         class="form-check-input" 
                         type="radio" 
-                        name={`inputRadio_${props.postfix}`} 
+                        name={`inputRadio_${postfix}`} 
                         id={`choice_${item.id}`} 
                         value={i} 
-                        checked={props.answers ? props.answers[props.id].answer === i : false}
-                        onChange={props.updateAnswersForm ? (e) => props.updateAnswersForm(Number(e.target.value), props.id) : () => {}}
+                        checked={answers ? answers[postfix].answer === i : false}
+                        onChange={updateAnswersForm ? (e) => updateAnswersForm(Number(e.target.value), postfix) : () => {}}
                     />
-                    <label class="form-check-label" for={`inputRadio_${props.postfix}`}>{item.text}</label>
+                    <label class="form-check-label" for={`inputRadio_${postfix}`}>{item.text}</label>
                 </div>
             )}
             

@@ -16,7 +16,6 @@
     overflow-y: auto;
     width: 70%;
     height: 80%;
-    // box-shadow: 0 -1px 5px 1px rgb(200, 200, 200);
     border: 2px solid rgb(220, 220, 220);
     &::-webkit-scrollbar {
         width: 7px;
@@ -33,6 +32,15 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px 20px;
+        &__title {
+            font-size: 17px;
+            font-weight: bold;
+            font-family: "Montserrat", sans-serif;
+            color: rgb(100, 100, 100);
+        }
+        &__id {
+
+        }
     }
     &__content {
         width: 100%;
@@ -55,7 +63,6 @@
 }
 
 .footer {
-    // box-shadow: 0 1px 5px 1px rgb(220, 220, 220);
     width: 70%;
     height: 10%;
     display: flex;
