@@ -17,12 +17,11 @@ const ViewForm = () => {
 
     const [answers, setAnswers] = useState(
         newForm() ? newForm().listAnswer.map(item => (
-            {id: item.id, answer: ""}
+            {id: item.id, answer: []}
         )) : ""
     );
 
     function updateAnswersForm(value, id) {
-        console.log(value, id)
         setAnswers(
             answers.map((item, i) => {
                 if (id === i) {

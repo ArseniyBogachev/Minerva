@@ -9,7 +9,9 @@ const DropDownList = (props) => {
                     <option value={item.id} key={i}>{item.text}</option>
                 )}
             </select> */}
-            <select>
+            <select 
+                value={props.answers ? props.answers[props.id].answer : ""} 
+                onChange={props.updateAnswersForm ? (e) => props.updateAnswersForm(Number(e.target.value), props.id) : () => {}}>
                 {props.optionAnswer.map((item, i) => 
                     <option value={item.id} key={i}>{item.text}</option>
                 )}

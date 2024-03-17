@@ -56,7 +56,7 @@ const Forms = () => {
                         {forms.map((item, i) =>
                             <div className={classes.listForms__forms__item} key={i}>
                                 <div className={classes.listForms__forms__item__title} onClick={() => editForm(item)}>{item.title}</div>
-                                <div className={classes.listForms__forms__item__answers}>{item.answers}</div>
+                                <div className={classes.listForms__forms__item__answers}>{item.datetime}</div>
                                 <div className={classes.listForms__forms__item__update}>{item.update}</div>
                                 <i class="fa-solid fa-ellipsis-vertical" id="action" data-bs-toggle="dropdown"></i>
                                 <ul class="dropdown-menu" aria-labelledby="action">
