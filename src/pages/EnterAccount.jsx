@@ -4,6 +4,7 @@ import classes from "../assets/styles/enterAccount.module.scss";
 import MyInput from "../components/MyInput.jsx";
 import MyButton from "../components/MyButton.jsx";
 import { UserData } from "../context";
+import { logIn, completeRegistration } from "../hooks/api/enterAccountApi.js";
 
 const EnterAccount = () => {
     const [enter, setEnter] = useState("login");
@@ -20,31 +21,38 @@ const EnterAccount = () => {
     const {user, setUser} = useContext(UserData);
 
     function cleanState() {
-        setEmail();
-        setPhone();
-        setName();
-        setSurname();
-        setPatronymic();
-        setPassword();
-        setRepiedPassword();
-    }
+        setEmail("");
+        setPhone("");
+        setName("");
+        setSurname("");
+        setPatronymic("");
+        setPassword("");
+        setRepiedPassword("");
+    };
+
+    function selectTag(tag) {
+        setEnter(tag);
+        cleanState();
+    };
 
     function createUser() {
-        if (password === repiedPassword) {
-            setUser({
-                email: email,
-                phone: phone,
-                name: name,
-                surname: surname,
-                patronymic: patronymic,
-                password: password
-            })
-            cleanState();
-            navigate("/");
-        }
-        else {
-            console.log('Error')
-        }    
+        completeRegistration({
+            email: email,
+            phone: phone,
+            name: name,
+            surname: surname,
+            patronymic: patronymic,
+            password: password,
+            repiedPassword: repiedPassword
+        }).then((resolve, reject) => {
+            if (resolve.status === 201) {
+                setUser(resolve.data)
+                cleanState();
+                navigate("/");
+            }
+        }).catch((error) => {
+            console.log(error)
+        })
     };
 
     return (
@@ -52,10 +60,10 @@ const EnterAccount = () => {
             <div className={classes.wrapper}>
                 <div className={classes.tabs}>
                     <ul class="nav nav-tabs">
-                        <li class="nav-item" onClick={() => setEnter("login")}>
+                        <li class="nav-item" onClick={() => selectTag("login")}>
                             <a className={enter === "login" ? "nav-link active" : "nav-link"} aria-current="page">Авторизация</a>
                         </li>
-                        <li class="nav-item" onClick={() => setEnter("register")}>
+                        <li class="nav-item" onClick={() => selectTag("register")}>
                             <a className={enter === "register" ? "nav-link active" : "nav-link"}>Регитрация</a>
                         </li>
                     </ul>
@@ -67,11 +75,15 @@ const EnterAccount = () => {
                                 <h3>Войти в аккаунт</h3>
                             </div>
                             <div className={classes.content__wrapper__login__body}>
-                                <MyInput placeholder={"Email"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}}/>
-                                <MyInput type={"password"} placeholder={"Пароль"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}}/>
+                                <MyInput placeholder={"Email"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}} value={email} change={setEmail}/>
+                                <MyInput type={"password"} placeholder={"Пароль"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}} value={password} change={setPassword}/>
                             </div>
                             <div className={classes.content__wrapper__login__footer}>
-                                <MyButton text={"Войти"} otherStyle={{height: "50%", width: "20%"}}/>
+                                <MyButton 
+                                    text={"Войти"} 
+                                    otherStyle={{height: "50%", width: "20%"}} 
+                                    click={() => logIn(email, password).then((resolve, reject) => setUser(resolve))}
+                                />
                             </div>
                         </div> : 
                         <div className={classes.content__wrapper__register}>

@@ -6,12 +6,12 @@ const NavBar = ({navigate, auth, setAuth}) => {
         <div className={classes.main}>
             <div className={classes.wrapper}>
                 <div className={classes.menu}>
-                    {auth ? 
                     <div className={classes.menu__authorized}>
                         <span onClick={() => navigate("/")}>Главная</span>
-                        <span onClick={() => navigate("/forms")}>Мои формы</span>
-                    </div> : 
-                    <div></div>}                    
+                        {auth ? 
+                        <span onClick={() => navigate("/forms")}>Мои формы</span> :
+                        <span></span>}
+                    </div>                   
                 </div>
                 <div className={classes.profile}>
                     {auth ? 

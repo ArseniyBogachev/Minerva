@@ -4,6 +4,7 @@ import classes from "../assets/styles/viewForm.module.scss";
 import { FormsData, TypeAnswerData } from "../context";
 import GeneratingFormFields from "../components/GeneratingFormFields.jsx";
 import MyButton from "../components/MyButton.jsx";
+import { saveAnswersApi } from "../hooks/api/formApi.js";
 
 const ViewForm = () => {
     const navigate = useNavigate();
@@ -16,9 +17,9 @@ const ViewForm = () => {
     };
 
     const [answers, setAnswers] = useState(
-        newForm() ? newForm().listAnswer.map(item => (
+        newForm() ? newForm().questions.map(item => (
             {id: item.id, answer: []}
-        )) : ""
+        )) : []
     );
 
     function updateAnswersForm(value, id) {
@@ -31,6 +32,16 @@ const ViewForm = () => {
             })
         )
     };
+
+    function saveAnswers() {
+        saveAnswersApi(formId, answers)
+            .then((resolve, _) => {
+                console.log(resolve)
+                setAnswers([]);
+                navigate("/");
+            })
+            .catch((error) => console.log(error));
+    }
 
     return (
         <div className={classes.main}>
@@ -46,12 +57,15 @@ const ViewForm = () => {
                         </div>
                     </div>
                     <div className={classes.form__content}>
-                        <GeneratingFormFields newForm={newForm().listAnswer} listTypeAnswer={listTypeAnswer} answers={answers} updateAnswersForm={updateAnswersForm}/>
+                        <GeneratingFormFields newForm={newForm().questions} listTypeAnswer={listTypeAnswer} answers={answers} updateAnswersForm={updateAnswersForm}/>
                     </div>
                 </div>
                 <div className={classes.footer}>
-                    <MyButton text={"Отправить"}/>
-                    <MyButton text={"Отмена"} backgroundColor={"rgb(180, 180, 180)"} click={() => {}}/>
+                    <MyButton text={"Отправить"} click={saveAnswers}/>
+                    <MyButton text={"Отмена"} backgroundColor={"rgb(180, 180, 180)"} click={() => {
+                        setAnswers([]);
+                        navigate("/");
+                    }}/>
                 </div>                 
             </div> :
             <div className={classes.wrapper}>

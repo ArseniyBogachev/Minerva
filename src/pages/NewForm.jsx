@@ -5,6 +5,7 @@ import MyButton from "../components/MyButton.jsx";
 import AnswerModal from "../components/AnswerModal.jsx";
 import PreviewModal from "../components/PreviewModal.jsx"
 import { FormsData, TypeAnswerData } from "../context";
+import { saveFormApi, updateFormByFormsApi } from "../hooks/api/formApi.js";
 
 const NewForm = () => {
     const navigate = useNavigate();
@@ -29,11 +30,11 @@ const NewForm = () => {
 
     const [newForm, setNewForm] = useState(location.state ? location.state.data : []);
 
-    const [stateModal, setStateModal] = useState(false)
+    const [stateModal, setStateModal] = useState(false);
 
     function removeAnswerByForm(id) {
         setNewForm([...newForm.filter(item => item.id !== id)]); 
-    }
+    };
 
     function cleanStates() {
         setStateModal(false)
@@ -45,7 +46,7 @@ const NewForm = () => {
         setCurrentTypeAnswer("");
         setCurrentOptionAnswer("")
         setMandatory(false);
-    }
+    };
 
     function addOptionAnswer(text) {
         setOptionAnswer([...optionAnswer, {
@@ -53,7 +54,7 @@ const NewForm = () => {
             text: currentOptionAnswer
         }]);
         setCurrentOptionAnswer("");
-    }
+    };
 
     function editAnswerByForm(id) {       
         const obj = newForm.find(item => item.id === id);
@@ -65,7 +66,7 @@ const NewForm = () => {
         setOptionAnswer(obj.optionAnswer);
         setMandatory(obj.mandatory);
         setStateModal(id);
-    }
+    };
 
     function updateAnswerByForm() {
         setNewForm(newForm.map(item => {
@@ -81,7 +82,7 @@ const NewForm = () => {
             return item
         }))
         cleanStates()
-    }
+    };
 
     function saveStates() {
         setNewForm([...newForm, {
@@ -95,38 +96,43 @@ const NewForm = () => {
             file: file
         }]);
         cleanStates();
-    }
+    };
 
     function updateFormByForms() {
-        setForms(
-            forms.map(item => {
-                if (item.id === location.state.id) {
-                    item.title = 'Новая форма',
-                    item.datetime = 'Без изменений',
-                    item.update = '01/01/24',
-                    item.listAnswer = newForm                
-                }
-                return item
+        updateFormByFormsApi(location.state.id, "Новая форма", newForm)
+            .then((resolve, _) => {
+                console.log(resolve);
+                setForms(
+                    forms.map(item => {
+                        if (item.id === location.state.id) {
+                            item.title = "Новая форма",
+                            item.questions = newForm                
+                        }
+                        return item
+                    })
+                );
+                cleanStates();
+                navigate("/forms");
             })
-        )
-        cleanStates();
-        navigate("/forms");
-    }
+    };
 
     function saveForm() {
-        setForms(
-            [...forms, {
-                id: nextID(forms),
-                title: 'Новая форма',
-                datetime: 'Без изменений',
-                update: '01/01/24',
-                listAnswer: newForm,
-                answers: []
-            }]
-        );
-        cleanStates();
-        navigate("/forms");
-    } 
+        saveFormApi("Новая форма", newForm)
+            .then((resolve, reject) => {
+                console.log(resolve);
+                setForms(
+                    [...forms, {
+                        id: nextID(forms),
+                        title: "Новая форма",
+                        questions: newForm,
+                        answers: []
+                    }]
+                );
+                cleanStates();
+                navigate("/forms");
+            })
+            .catch(error => console.log(error));
+    }; 
 
     return (
         <div className={classes.main}>

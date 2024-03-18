@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { FormsData, UserData, TypeAnswerData } from "./context";
+import { globalRender } from "./router/protectedRouting.js";
 import classes from "./assets/styles/app.module.scss"
 import NavBar from "./components/NavBar.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,6 +28,8 @@ const App = () => {
         {id: 7, text: 'Файл', typeTag: InputFile},
         {id: 8, text: 'Дата', typeTag: InputDate}
     ]);
+
+    // useEffect(() => globalRender(window.location.pathname, user, navigate));
 
     return (
         <UserData.Provider value={{ user, setUser }}>

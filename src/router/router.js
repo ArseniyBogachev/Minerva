@@ -21,19 +21,19 @@ const router = createBrowserRouter([
                 element: <Forms/>,
             },
             {
-                path: '/forms/edit/',
+                path: "/forms/edit",
                 element: <NewForm/>
             },
             {
-                path: '/enter',
+                path: "/enter",
                 element: <EnterAccount/>
             },
             {
-                path: '/profile',
+                path: "/profile",
                 element: <Profile/>
             },
             {
-                path: '/forms/:formId',
+                path: "/forms/:formId",
                 element: <ViewForm/>
             }
         ]
