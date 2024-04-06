@@ -1,17 +1,22 @@
-import React, { useState, useContext } from "react";
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 import classes from "../assets/styles/newForm.module.scss";
 import MyButton from "../components/MyButton.jsx";
 import AnswerModal from "../components/AnswerModal.jsx";
 import PreviewModal from "../components/PreviewModal.jsx"
 import { FormsData, TypeAnswerData } from "../context";
-import { saveFormApi, updateFormByFormsApi } from "../hooks/api/formApi.js";
+import { saveFormApi, addFormBlockApi, listFormBlockApi, updateBlockApi } from "../hooks/api/formApi.js";
+import { responseDataToListBlock } from "../hooks/sundry/parseListBlock.js";
 
 const NewForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { formId } = useParams();
     const [dragElem, setDragElem] = useState(null);
     const [dropElem, setDropElem] = useState(null);
+
+    const [cookies, _, __] = useCookies(["user"]);
     
     const {forms, setForms} = useContext(FormsData);
     const {listTypeAnswer, setListTypeAnswer} = useContext(TypeAnswerData);
@@ -21,32 +26,47 @@ const NewForm = () => {
     };
     const [question, setQuestion] = useState("");
     const [comment, setComment] = useState("");
-    const [datetime, setDatetime] = useState("");
     const [mandatory, setMandatory] = useState(false);
     const [optionAnswer, setOptionAnswer] = useState([]);
     const [file, setFile] = useState([]);
     const [currentTypeAnswer, setCurrentTypeAnswer] = useState("");
     const [currentOptionAnswer, setCurrentOptionAnswer] = useState("");
 
-    const [newForm, setNewForm] = useState(location.state ? location.state.data : []);
+    const [datetime, setDatetime] = useState("");
+
+    const [listBlock, setListBlock] = useState([]);
 
     const [stateModal, setStateModal] = useState(false);
 
     function removeAnswerByForm(id) {
-        setNewForm([...newForm.filter(item => item.id !== id)]); 
+        setListBlock([...listBlock.filter(item => item.id !== id)]); 
     };
 
     function cleanStates() {
         setStateModal(false)
         setQuestion("");
         setComment("");
-        setDatetime("");
         setOptionAnswer([])
         setFile([]);
         setCurrentTypeAnswer("");
         setCurrentOptionAnswer("")
         setMandatory(false);
     };
+
+    useEffect(() => {
+        async function listFormBlock() {
+            const response = await listFormBlockApi(cookies.token, formId);
+
+            if (response.status === 200 && response.data) {
+                setListBlock(responseDataToListBlock(response.data)); 
+            }
+            else {
+                console.log(response);
+            }
+        };
+
+        listFormBlock();
+    }, []);
 
     function addOptionAnswer(text) {
         setOptionAnswer([...optionAnswer, {
@@ -57,56 +77,81 @@ const NewForm = () => {
     };
 
     function editAnswerByForm(id) {       
-        const obj = newForm.find(item => item.id === id);
+        const obj = listBlock.find(item => item.id === id);
         setQuestion(obj.question);
         setComment(obj.comment);
-        setDatetime(obj.datetime);
         setFile(obj.file);
         setCurrentTypeAnswer(obj.typeAnswer);
         setOptionAnswer(obj.optionAnswer);
         setMandatory(obj.mandatory);
-        setStateModal(id);
+        setStateModal(obj.id);
     };
 
-    function updateAnswerByForm() {
-        setNewForm(newForm.map(item => {
+    async function updateBlock() {
+        const data = {
+            id: stateModal,
+            question: question,
+            comment: comment,
+            file: file,
+            mandatory: mandatory,
+            optionAnswer: optionAnswer,
+            typeAnswer: currentTypeAnswer,
+        }
+
+        // const response = await updateBlockApi(cookies.token, stateModal, data);
+
+        // if (response.status === 200) {
+        //     setListBlock(listBlock.map(item => {
+        //         if (item.id === stateModal) {
+        //             item = data
+        //         }
+        //         return item
+        //     }))
+        // }
+        // else {
+        //     console.log(response)
+        // }
+
+        setListBlock(listBlock.map(item => {
             if (item.id === stateModal) {
-                item.question = question;
-                item.comment = comment;
-                item.datetime = datetime;
-                item.file = file;
-                item.mandatory = mandatory;
-                item.optionAnswer = optionAnswer;
-                item.typeAnswer = currentTypeAnswer;
+                item = data
             }
             return item
         }))
-        cleanStates()
+     
+        cleanStates();
     };
 
-    function saveStates() {
-        setNewForm([...newForm, {
-            id: nextID(newForm),
+    async function addFormBlock() {
+        const newBlock = {
             question: question,
             typeAnswer: currentTypeAnswer,
             comment: comment,
-            datetime: datetime,
             mandatory: mandatory,
             optionAnswer: optionAnswer,
             file: file
-        }]);
+        }
+
+        const response = await addFormBlockApi(cookies.token, formId, newBlock)
+
+        if (response.status === 200) {
+            setListBlock([...listBlock, newBlock]);
+        }
+        else {
+            console.log(response)
+        }
         cleanStates();
     };
 
     function updateFormByForms() {
-        updateFormByFormsApi(location.state.id, "Новая форма", newForm)
+        updateFormByFormsApi(location.state.id, "Новая форма", listBlock)
             .then((resolve, _) => {
                 console.log(resolve);
                 setForms(
                     forms.map(item => {
                         if (item.id === location.state.id) {
                             item.title = "Новая форма",
-                            item.questions = newForm                
+                            item.questions = listBlock                
                         }
                         return item
                     })
@@ -117,14 +162,14 @@ const NewForm = () => {
     };
 
     function saveForm() {
-        saveFormApi("Новая форма", newForm)
+        saveFormApi("Новая форма", listBlock)
             .then((resolve, reject) => {
                 console.log(resolve);
                 setForms(
                     [...forms, {
                         id: nextID(forms),
                         title: "Новая форма",
-                        questions: newForm,
+                        questions: listBlock,
                         answers: []
                     }]
                 );
@@ -137,7 +182,13 @@ const NewForm = () => {
     return (
         <div className={classes.main}>
             <div className={classes.wrapper}>
-                <div className={classes.header}> 
+                <div className={classes.header}>
+                    <div className={classes.header__date}>
+                        <div className={classes.header__date__item}>
+                            <span>Дедлайн выполнения</span>
+                            <input type="datetime-local" value={datetime} onChange={event => setDatetime(event.target.value)}/>
+                        </div>
+                    </div>
                     <div className={classes.header__listBtn}>
                         <MyButton text={'Предпросмотр'} backgroundColor={'rgb(225, 225, 225)'} toggle={"modal"} target={"#previewModal"}/>
                         <MyButton text={'Опубликовать'} click={location.state ? updateFormByForms : saveForm}/>
@@ -154,7 +205,7 @@ const NewForm = () => {
                         </div>
                     </div>
 
-                    <PreviewModal newForm={newForm} listTypeAnswer={listTypeAnswer}/>
+                    <PreviewModal listBlock={listBlock} listTypeAnswer={listTypeAnswer}/>
 
                     <AnswerModal 
                         stateModal={stateModal}
@@ -164,20 +215,18 @@ const NewForm = () => {
                         mandatory={mandatory}
                         optionAnswer={optionAnswer}
                         setOptionAnswer={setOptionAnswer}
-                        datetime={datetime}
                         file={file}
                         currentOptionAnswer={currentOptionAnswer}
                         listTypeAnswer={listTypeAnswer}
                         setQuestion={setQuestion}
                         setComment={setComment}
-                        setDatetime={setDatetime}
                         setFile={setFile}
                         setCurrentOptionAnswer={setCurrentOptionAnswer}
                         setMandatory={setMandatory}
                         cleanStates={cleanStates}
-                        saveStates={saveStates}
+                        addFormBlock={addFormBlock}
                         addOptionAnswer={addOptionAnswer}
-                        updateAnswerByForm={updateAnswerByForm}
+                        updateBlock={updateBlock}
                         setCurrentTypeAnswer={setCurrentTypeAnswer}/>
 
                     <div className={classes.content__newForm}>
@@ -185,7 +234,7 @@ const NewForm = () => {
                             <h3>Новая форма</h3>
                         </div>                        
                         <div className={classes.content__newForm__list}>
-                            {newForm.map((item, i) => 
+                            {listBlock.map((item, i) => 
                                 <div 
                                     className={classes.content__newForm__list__item} 
                                     key={i} 
@@ -203,8 +252,8 @@ const NewForm = () => {
                                         }
                                     }}
                                     onDrop={() => {                                       
-                                        const currentElem = newForm[dragElem]
-                                        const tNewForm = [...newForm]
+                                        const currentElem = listBlock[dragElem]
+                                        const tNewForm = [...listBlock]
                                         if (dragElem > dropElem) {
                                             tNewForm.splice(dropElem, 0, currentElem)
                                             tNewForm.splice(dragElem + 1, 1)
@@ -213,7 +262,7 @@ const NewForm = () => {
                                             tNewForm.splice(dropElem + 1, 0, currentElem)
                                             tNewForm.splice(dragElem, 1)
                                         }   
-                                        setNewForm(tNewForm)
+                                        setListBlock(tNewForm)
                                     }}
                                 >
                                     <div className={classes.content__newForm__list__item__answer}>

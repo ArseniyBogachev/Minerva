@@ -16,7 +16,7 @@ const NavBar = ({navigate, auth, setAuth}) => {
                 <div className={classes.profile}>
                     {auth ? 
                     <div className={classes.profile__authorized}>
-                        <span onClick={() => navigate("/profile")}>Профиль ({auth.name})</span>
+                        <span onClick={() => navigate("/profile")}>Профиль ({auth.login})</span>
                     </div> : 
                     <div className={classes.profile__nonAuthorized}>
                         <span onClick={() => navigate("/enter")}>Вход <i class="fa-solid fa-arrow-right-to-bracket"></i></span>       

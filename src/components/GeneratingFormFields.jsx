@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import classes from "../assets/styles/generatingFormFields.module.scss";
 
-const GeneratingFormFields = ({newForm, listTypeAnswer, answers, updateAnswersForm}) => {
+const GeneratingFormFields = ({listBlock, listTypeAnswer, answers, updateAnswersForm}) => {
     return (
-        newForm.map((item, i) => 
+        listBlock.map((item, i) => 
             <div className={classes.item} key={i}>
                 <div className={classes.item__question}>
                     <p className={classes.item__question__text}>{i + 1}) {item.question}</p>

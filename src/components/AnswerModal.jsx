@@ -5,9 +5,9 @@ import MyButton from "./MyButton.jsx"
 const AnswerModal = ({
     cleanStates, 
     currentTypeAnswer, 
-    updateAnswerByForm,
+    updateBlock,
     stateModal,
-    saveStates, 
+    addFormBlock, 
     question, 
     file,
     listTypeAnswer,
@@ -16,17 +16,14 @@ const AnswerModal = ({
     currentOptionAnswer,
     setCurrentOptionAnswer,
     comment, 
-    datetime,
     mandatory,
     setMandatory,
     addOptionAnswer,
     setQuestion,
     setComment,
-    setDatetime,
     setCurrentTypeAnswer,
     setFile
     }) => {
-    
 
     return (
         <div class="modal fade myModal" className={classes.myModal} id="answerModal" tabIndex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
@@ -79,14 +76,10 @@ const AnswerModal = ({
                             <span className={classes.myModal__dialog__content__body__mandatory__title}>Обязательный вопрос</span>
                             <input className={classes.myModal__dialog__content__body__mandatory__choice} type="checkbox" checked={mandatory} onChange={() => setMandatory(!mandatory)}/>
                         </div>
-                        <div className={classes.myModal__dialog__content__body__time}>
-                            <span>Дедлайн выполнения</span>
-                            <input type="datetime-local" value={datetime} onChange={event => setDatetime(event.target.value)}/>
-                        </div>
                     </div>
                     <div class="modal-footer myModal__dialog__content__footer" className={classes.myModal__dialog__content__footer}>
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal" onClick={cleanStates}>Отмена</button>
-                        <button type="button" class="btn" style={{color: 'white', backgroundColor: 'rgb(150, 209, 158)'}} data-bs-dismiss="modal" onClick={stateModal ? updateAnswerByForm : saveStates}>Сохранить</button>
+                        <button type="button" class="btn" style={{color: 'white', backgroundColor: 'rgb(150, 209, 158)'}} data-bs-dismiss="modal" onClick={stateModal ? updateBlock : addFormBlock}>Сохранить</button>
                     </div>
                 </div>
             </div>

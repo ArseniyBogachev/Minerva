@@ -1,65 +1,87 @@
-function saveAnswersApi(id, answers) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (true) {
-                resolve({
-                    id: id,
-                    answers: answers
-                })
+import axios from "axios";
+
+async function listFormBlockApi(token, formId) {
+    try {
+        const response = await axios.get(`http://localhost:8080/formBuilder/edit/${formId}/list`,
+        {
+            headers: {
+                "Authorization": `Token ${token}`,
             }
-            else {
-                reject("Error")
-            } 
-        }, 1000)
-    })
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
 }
 
-function removeFormApi(id) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (true) {
-                resolve({
-                    id: id
-                })
+async function addFormBlockApi(token, formId, data) {
+    try {
+        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${formId}/add`,
+        {
+            data: data
+        },
+        {
+            headers: {
+                "Authorization": `Token ${token}`,
             }
-            else {
-                reject("Error")
-            } 
-        }, 200)
-    })
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
+};
+
+// function removeFormApi(id) {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             if (true) {
+//                 resolve({
+//                     id: id
+//                 })
+//             }
+//             else {
+//                 reject("Error")
+//             } 
+//         }, 200)
+//     })
+// };
+
+async function updateBlockApi(token, blockId, data) {
+    try {
+        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${blockId}/set`,
+        {
+            data: data
+        },
+        {
+            headers: {
+                "Authorization": `Token ${token}`,
+            }
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
 }
 
-function updateFormByFormsApi(id, name, questions) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (true) {
-                resolve({
-                    id: id,
-                    name: name,
-                    questions: questions
-                })
+async function saveFormApi(token) {
+    try {
+        const response = await axios.post("http://localhost:8080/formBuilder/new",
+        {
+            title: "Новая форма"
+        },
+        {
+            headers: {
+                "Authorization": `Token ${token}`
             }
-            else {
-                reject("Error")
-            } 
-        }, 1000)
-    })
-}
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
+};
 
-function saveFormApi(name, questions) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (true) {
-                resolve({
-                    name: name,
-                    questions: questions
-                })
-            }
-            else {
-                reject("Error")
-            } 
-        }, 1000)
-    })
-}
-
-export { saveAnswersApi, saveFormApi, updateFormByFormsApi, removeFormApi }
+export { addFormBlockApi, listFormBlockApi, saveFormApi, updateBlockApi }

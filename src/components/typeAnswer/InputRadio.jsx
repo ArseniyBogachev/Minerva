@@ -11,10 +11,11 @@ const InputRadio = ({postfix, optionAnswer, answers, updateAnswersForm}) => {
                         type="radio" 
                         name={`inputRadio_${postfix}`} 
                         id={`choice_${item.id}`} 
-                        value={i} 
+                        value={i}  
                         checked={answers ? answers[postfix].answer === i : false}
                         onChange={updateAnswersForm ? (e) => updateAnswersForm(Number(e.target.value), postfix) : () => {}}
                     />
+                    {/* <label class="form-check-label" for={`inputRadio_${postfix}`}>{item.text ? item.text : item[1].Value}</label> */}
                     <label class="form-check-label" for={`inputRadio_${postfix}`}>{item.text}</label>
                 </div>
             )}

@@ -1,26 +1,67 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import classes from "../assets/styles/viewForm.module.scss";
 import { FormsData, TypeAnswerData } from "../context";
 import GeneratingFormFields from "../components/GeneratingFormFields.jsx";
 import MyButton from "../components/MyButton.jsx";
-import { saveAnswersApi } from "../hooks/api/formApi.js";
+import { listFormBlockApi } from "../hooks/api/formApi.js";
+import { listFormsApi } from "../hooks/api/listFormsApi.js";
+import { responseDataToListBlock } from "../hooks/sundry/parseListBlock.js";
 
 const ViewForm = () => {
     const navigate = useNavigate();
     const { formId } = useParams();
     const {forms, setForms} = useContext(FormsData);
     const {listTypeAnswer, setListTypeAnswer} = useContext(TypeAnswerData);
+    const [cookies, _, __] = useCookies(["user"]);
+    const [questions, setQuestions] = useState([]);
+    const [answers, setAnswers] = useState([]);
+    const [title, setTitle] = useState("");
+    
 
-    function newForm() {
-        return forms.find(item => item.id === Number(formId))
-    };
+    useEffect(() => {
+        async function getForm() {
+            const responseForms = await listFormsApi(cookies.token);
+            const responseBlocks = await listFormBlockApi(cookies.token, formId);
 
-    const [answers, setAnswers] = useState(
-        newForm() ? newForm().questions.map(item => (
-            {id: item.id, answer: []}
-        )) : []
-    );
+            if (responseBlocks.status === 200 && responseForms.status === 200 && responseBlocks.data) {
+                // let responseToNewForm = {};
+                // const result = {
+                //     title: responseForms.data.find(item => item.id === formId).title,
+                //     questions: [],
+                //     answers: []
+                // }
+
+                // for (let item of responseBlocks.data) {
+                //     responseToNewForm["id"] = item.id;
+
+                //     for (let block of item.data) {
+                //         responseToNewForm[block.Key] = block.Value
+                //     };
+
+                //     result.questions.push(responseToNewForm);
+                //     result.answers.push(
+                //         {id: item.id, answer: []}
+                //     )
+                //     responseToNewForm = {};
+                // }; 
+                const listBlocks = responseDataToListBlock(responseBlocks.data);
+
+                setQuestions(listBlocks)
+                setAnswers(listBlocks.map(item => (
+                    {id: item.id, answer: []}
+                )))
+                setTitle(responseForms.data.find(item => item.id === formId).title)
+            }
+            else {
+                console.log(responseForms)
+                console.log(responseBlocks)
+            }
+        };
+
+        getForm()
+    }, []);
 
     function updateAnswersForm(value, id) {
         setAnswers(
@@ -34,30 +75,32 @@ const ViewForm = () => {
     };
 
     function saveAnswers() {
-        saveAnswersApi(formId, answers)
-            .then((resolve, _) => {
-                console.log(resolve)
-                setAnswers([]);
-                navigate("/");
-            })
-            .catch((error) => console.log(error));
+        // saveAnswersApi(formId, answers)
+        //     .then((resolve, _) => {
+        //         console.log(resolve)
+        //         setAnswers([]);
+        //         navigate("/");
+        //     })
+        //     .catch((error) => console.log(error));
+        setAnswers([]);
+        navigate("/forms");
     }
 
     return (
         <div className={classes.main}>
-            {newForm() ? 
+            {questions ? 
             <div className={classes.wrapper}>
                 <div className={classes.form}>
                     <div className={classes.form__header}>
                         <div className={classes.form__header__title}>
-                            <span>{newForm().title}</span>
+                            <span>{title}</span>
                         </div>
                         <div className={classes.form__header__id}>
                             <span>#{formId}</span>
                         </div>
                     </div>
                     <div className={classes.form__content}>
-                        <GeneratingFormFields newForm={newForm().questions} listTypeAnswer={listTypeAnswer} answers={answers} updateAnswersForm={updateAnswersForm}/>
+                        <GeneratingFormFields listBlock={questions} listTypeAnswer={listTypeAnswer} answers={answers} updateAnswersForm={updateAnswersForm}/>
                     </div>
                 </div>
                 <div className={classes.footer}>

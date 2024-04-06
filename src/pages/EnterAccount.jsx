@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import classes from "../assets/styles/enterAccount.module.scss";
 import MyInput from "../components/MyInput.jsx";
@@ -12,18 +13,19 @@ const EnterAccount = () => {
 
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [name, setName] = useState("");
+    const [login, setLogin] = useState("");
     const [surname, setSurname] = useState("");
     const [patronymic, setPatronymic] = useState("");
     const [password, setPassword] = useState("");
     const [repiedPassword, setRepiedPassword] = useState("");
 
     const {user, setUser} = useContext(UserData);
+    const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
     function cleanState() {
         setEmail("");
         setPhone("");
-        setName("");
+        setLogin("");
         setSurname("");
         setPatronymic("");
         setPassword("");
@@ -35,25 +37,51 @@ const EnterAccount = () => {
         cleanState();
     };
 
-    function createUser() {
-        completeRegistration({
-            email: email,
-            phone: phone,
-            name: name,
-            surname: surname,
-            patronymic: patronymic,
+    async function createUser() {
+        const response = await completeRegistration({
+            // email: email,
+            // phone: phone,
+            login: login,
+            // surname: surname,
+            // patronymic: patronymic,
             password: password,
             repiedPassword: repiedPassword
-        }).then((resolve, reject) => {
-            if (resolve.status === 201) {
-                setUser(resolve.data)
-                cleanState();
-                navigate("/");
-            }
-        }).catch((error) => {
-            console.log(error)
-        })
+        });
+
+        if (response.status === 200) {
+            setUser({
+                email: email,
+                phone: phone,
+                login: login,
+                surname: surname,
+                patronymic: patronymic,
+                password: password,
+            });
+            setCookie("token", response.data.token);
+            cleanState();
+            navigate("/");
+        }
+        else {
+            console.log("Error")
+        }
     };
+
+    async function logInToAccount() {
+        const response = await logIn(login, password)
+
+        if (response.status === 200) {
+            setCookie("token", response.data.token);
+            cleanState();
+            setUser({
+                login: login
+            })
+            navigate("/")
+            // window.location.reload()
+        }
+        else {
+            console.log(response)
+        }      
+    }
 
     return (
         <div className={classes.main}>
@@ -75,14 +103,14 @@ const EnterAccount = () => {
                                 <h3>Войти в аккаунт</h3>
                             </div>
                             <div className={classes.content__wrapper__login__body}>
-                                <MyInput placeholder={"Email"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}} value={email} change={setEmail}/>
+                                <MyInput placeholder={"Логин"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}} value={login} change={setLogin}/>
                                 <MyInput type={"password"} placeholder={"Пароль"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}} value={password} change={setPassword}/>
                             </div>
                             <div className={classes.content__wrapper__login__footer}>
                                 <MyButton 
                                     text={"Войти"} 
                                     otherStyle={{height: "50%", width: "20%"}} 
-                                    click={() => logIn(email, password).then((resolve, reject) => setUser(resolve))}
+                                    click={logInToAccount}
                                 />
                             </div>
                         </div> : 
@@ -94,7 +122,7 @@ const EnterAccount = () => {
                                 <MyInput placeholder={"Email"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={email} change={setEmail}/>
                                 <MyInput placeholder={"Номер телефона"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={phone} change={setPhone}/>
                                 <div className={classes.content__wrapper__register__body__fio}>
-                                    <MyInput placeholder={"Имя"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={name} change={setName}/>
+                                    <MyInput placeholder={"Логин"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={login} change={setLogin}/>
                                     <MyInput placeholder={"Фамилия"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={surname} change={setSurname}/>
                                     <MyInput placeholder={"Отчество (при наличии)"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={patronymic} change={setPatronymic}/>
                                 </div>                                

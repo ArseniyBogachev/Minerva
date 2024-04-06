@@ -34,6 +34,7 @@ const InputMultipleRadio = ({postfix, optionAnswer, answers, updateAnswersForm})
                         checked={answers ? checkRadio(i) : false}
                         onChange={() => updateStateCheckbox(i)}
                     />
+                    {/* <label class="form-check-label" for={`inputMultiple_${postfix}`}>{item.text ? item.text : item[1].Value}</label> */}
                     <label class="form-check-label" for={`inputMultiple_${postfix}`}>{item.text}</label>
                 </div>
             )}

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { FormsData, UserData, TypeAnswerData } from "./context";
+import { useCookies } from "react-cookie";
 import { globalRender } from "./router/protectedRouting.js";
+import { verifyUserApi } from "./hooks/api/enterAccountApi.js"
 import classes from "./assets/styles/app.module.scss"
 import NavBar from "./components/NavBar.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -30,6 +32,24 @@ const App = () => {
     ]);
 
     // useEffect(() => globalRender(window.location.pathname, user, navigate));
+    const [cookies, _, __] = useCookies(["user"]);
+
+    useEffect(() => {
+        async function verifyUser() {
+            const response = await verifyUserApi(cookies.token);
+
+            if (response) {
+                if (response.status === 200) {
+                    setUser(response.data);
+                }
+                else {
+                    console.log(response)
+                }
+            }
+        }
+
+        verifyUser()
+    }, [])
 
     return (
         <UserData.Provider value={{ user, setUser }}>

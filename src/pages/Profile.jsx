@@ -1,30 +1,60 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import classes from "../assets/styles/profile.module.scss";
 import MyButton from "../components/MyButton.jsx";
 import { UserData } from "../context";
+import { useCookies } from "react-cookie";
+import { verifyUserApi } from "../hooks/api/enterAccountApi.js";
 
 const Profile = () => {
     const [edit, setEdit] = useState(true);
     const {user, setUser} = useContext(UserData);
 
-    const [email, setEmail] = useState(user.email);
-    const [phone, setPhone] = useState(user.phone);
-    const [name, setName] = useState(user.name);
-    const [surname, setSurname] = useState(user.surname);
-    const [patronymic, setPatronymic] = useState(user.patronymic);
+    console.log(user)
+
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [login, setLogin] = useState("");
+    const [first_name, setFirst_name] = useState("");
+    const [last_name, setLast_name] = useState("");
+
+    const [cookies, _, __] = useCookies(["user"]);
+
+    useEffect(() => {
+        console.log(1)
+        async function verifyUser() {
+            const response = await verifyUserApi(cookies.token);
+
+            if (response) {
+                if (response.status === 200) {
+                    setUser(response.data);
+                    setEmail(response.data.email);
+                    setPhone(response.data.phone);
+                    setLogin(response.data.login);
+                    setFirst_name(response.data.first_name);
+                    setLast_name(response.data.last_name);
+                }
+                else {
+                    console.log(response)
+                }
+            }
+        }
+
+        verifyUser()
+    }, [])
 
     function choiceInput(key) {
+        console.log(2)
         switch (key) {
             case "email":
                 return {get: email, set: setEmail}
             case "phone":
                 return {get: phone, set: setPhone}
-            case "name":
-                return {get: name, set: setName}
-            case "surname":
-                return {get: surname, set: setSurname}
-            case "patronymic":
-                return {get: patronymic, set: setPatronymic}
+            case "login":
+                return {get: login, set: setLogin}
+            case "last_name":
+                return {get: last_name, set: setLast_name}
+            case "first_name":
+                return {get: first_name, set: setFirst_name}
         }
     }
 
@@ -34,11 +64,11 @@ const Profile = () => {
         }
         else {
             setUser({
+                login: login,
+                first_name: first_name,
+                last_name: last_name,
                 email: email,
                 phone: phone,
-                name: name,
-                surname: surname,
-                patronymic: patronymic
             })
             setEdit(!edit)
         }        
@@ -61,7 +91,7 @@ const Profile = () => {
                                 click={() => editUser()}/>
                         </div>
                         <div className={classes.profile__wrapper__body}>
-                            {Object.keys(user).map(key => key !== "password" ? <div className={classes.profile__wrapper__body__item}>
+                            {Object.keys(user).map(key => key !== "is_admin" ? <div className={classes.profile__wrapper__body__item}>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text">{key}</span>
                                     <input 

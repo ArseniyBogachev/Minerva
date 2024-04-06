@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router-dom';
 import classes from "../assets/styles/forms.module.scss"
 import MyButton from "../components/MyButton.jsx";
 import MyInput from "../components/MyInput.jsx";
 import { FormsData, UserData } from "../context";
-import { removeFormApi } from "../hooks/api/formApi.js";
+import { listFormsApi, createFormApi, removeFormApi } from "../hooks/api/listFormsApi.js";
 
 const Forms = () => {
     const navigate = useNavigate();
@@ -12,39 +13,53 @@ const Forms = () => {
     const {user, setUser} = useContext(UserData);
     const [stateLoading, setStateLoading] = useState(false);
 
-    const response = ms => {
-        return new Promise(r => setTimeout(() => r('response end'), ms))
-    };
+    const [cookies, _, __] = useCookies(["user"]);
 
-    function createForm() {
-        setStateLoading(true);
-        response(1000)
-            .then((r) => {
-                console.log(r); 
-                setStateLoading(false);
-                navigate("/forms/edit");
+    useEffect(() => {
+        async function listForms() {
+            const response = await listFormsApi(cookies.token)
+
+            if (response.data) {
+                setForms(response.data)
             }
-        )
+            else if (response.status === 200 && response.data) {
+                setForms([])
+            }
+            else {
+                console.log(response)
+            }
+        };
+
+        listForms();
+    }, [])
+
+    async function createForm() {
+        setStateLoading(true);
+        const response = await createFormApi(cookies.token)
+        setStateLoading(false);
+
+        if (response.data) {
+            navigate(`/forms/${response.data.id}/edit`)
+        }
+        else {
+            console.log(response)
+        }
     };
 
     function editForm(item) {
-        navigate("/forms/edit", { 
-            state: {
-                id: item.id,
-                data: item.questions
-            }
-        });
+        navigate(`/forms/${item.id}/edit`);
     };
 
-    function removeForm(id) {
-        removeFormApi(id)
-            .then((resolve, _) => {
-                console.log(resolve);
-                setForms([...forms.filter(item => {
-                    item.id !== id
-                })]);
-            })
-            .catch(error => console.log(error));
+    async function removeForm(id) {
+        setForms([...forms.filter(item => item.id !== id)]);
+        // const response = await removeFormApi(cookies.token, id)
+
+        // if (response.status === 200) {
+        //     setForms([...forms.filter(item => item.id !== id)]);
+        // }
+        // else {
+        //     console.log(response)
+        // }
     };
 
     return (
