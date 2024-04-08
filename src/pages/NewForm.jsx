@@ -6,7 +6,8 @@ import MyButton from "../components/MyButton.jsx";
 import AnswerModal from "../components/AnswerModal.jsx";
 import PreviewModal from "../components/PreviewModal.jsx"
 import { FormsData, TypeAnswerData } from "../context";
-import { saveFormApi, addFormBlockApi, listFormBlockApi, updateBlockApi } from "../hooks/api/formApi.js";
+import { listFormsApi, updateTitleFormApi } from "../hooks/api/listFormsApi.js";
+import { saveFormApi, addFormBlockApi, listFormBlockApi, updateBlockApi, updateOrderBlockApi } from "../hooks/api/formApi.js";
 import { responseDataToListBlock } from "../hooks/sundry/parseListBlock.js";
 
 const NewForm = () => {
@@ -21,8 +22,8 @@ const NewForm = () => {
     const {forms, setForms} = useContext(FormsData);
     const {listTypeAnswer, setListTypeAnswer} = useContext(TypeAnswerData);
 
-    const nextID = (list) => {
-        return list.length ? list.at(-1).id + 1 : 1
+    const nextID = (list, param) => {
+        return list.length ? list.at(-1)[param] + 1 : 1
     };
     const [question, setQuestion] = useState("");
     const [comment, setComment] = useState("");
@@ -33,6 +34,7 @@ const NewForm = () => {
     const [currentOptionAnswer, setCurrentOptionAnswer] = useState("");
 
     const [datetime, setDatetime] = useState("");
+    const [titleForm, setTitleForm] = useState("");
 
     const [listBlock, setListBlock] = useState([]);
 
@@ -54,23 +56,26 @@ const NewForm = () => {
     };
 
     useEffect(() => {
-        async function listFormBlock() {
-            const response = await listFormBlockApi(cookies.token, formId);
+        async function totalData() {
+            const responseForms = await listFormsApi(cookies.token);
+            const responseBlock = await listFormBlockApi(cookies.token, formId);
 
-            if (response.status === 200 && response.data) {
-                setListBlock(responseDataToListBlock(response.data)); 
+            if (responseBlock.status === 200 && responseBlock.data && responseForms.status === 200) {
+                setListBlock(responseDataToListBlock(responseBlock.data)); 
+                setTitleForm(responseForms.data.find(item => item.id === formId).title);
             }
             else {
-                console.log(response);
+                console.log(responseBlock);
+                console.log(responseForms);
             }
         };
 
-        listFormBlock();
+        totalData();
     }, []);
 
     function addOptionAnswer(text) {
         setOptionAnswer([...optionAnswer, {
-            id: nextID(optionAnswer),
+            id: nextID(optionAnswer, "id"),
             text: currentOptionAnswer
         }]);
         setCurrentOptionAnswer("");
@@ -135,13 +140,47 @@ const NewForm = () => {
         const response = await addFormBlockApi(cookies.token, formId, newBlock)
 
         if (response.status === 200) {
-            setListBlock([...listBlock, newBlock]);
+            setListBlock([...listBlock, {...newBlock, order: nextID(listBlock, "order")}]);
         }
         else {
             console.log(response)
         }
         cleanStates();
     };
+
+    async function updateTitleForm() {
+        const response = await updateTitleFormApi(cookies.token, formId, titleForm);
+
+        if (response.status === 200) {
+            console.log(response)
+        }
+        else {
+            console.log(response)
+        }
+    };
+
+    async function updateOrderBlock() {
+        const response = await updateOrderBlockApi(cookies.token, formId, {
+            new: dropElem,
+            old: dragElem
+        })
+
+        if (response.status === 200) {
+            const currentElem = listBlock[dragElem];
+            const tListBlock = [...listBlock];
+
+            if (dragElem > dropElem) {
+                tListBlock.splice(dropElem, 0, currentElem);
+                tListBlock.splice(dragElem + 1, 1);
+            }
+            else {
+                tListBlock.splice(dropElem + 1, 0, currentElem);
+                tListBlock.splice(dragElem, 1);
+            };
+
+            setListBlock(tListBlock);
+        }
+    }
 
     function updateFormByForms() {
         updateFormByFormsApi(location.state.id, "Новая форма", listBlock)
@@ -162,32 +201,41 @@ const NewForm = () => {
     };
 
     function saveForm() {
-        saveFormApi("Новая форма", listBlock)
-            .then((resolve, reject) => {
-                console.log(resolve);
-                setForms(
-                    [...forms, {
-                        id: nextID(forms),
-                        title: "Новая форма",
-                        questions: listBlock,
-                        answers: []
-                    }]
-                );
-                cleanStates();
-                navigate("/forms");
-            })
-            .catch(error => console.log(error));
+        // saveFormApi("Новая форма", listBlock)
+        //     .then((resolve, reject) => {
+        //         console.log(resolve);
+        //         setForms(
+        //             [...forms, {
+        //                 id: nextID(forms),
+        //                 title: "Новая форма",
+        //                 questions: listBlock,
+        //                 answers: []
+        //             }]
+        //         );
+        cleanStates();
+        navigate("/forms");
+            // })
+            // .catch(error => console.log(error));
     }; 
 
     return (
         <div className={classes.main}>
             <div className={classes.wrapper}>
                 <div className={classes.header}>
-                    <div className={classes.header__date}>
-                        <div className={classes.header__date__item}>
+                    <div className={classes.header__listInput}>
+                        <div className={classes.header__listInput__date}>
                             <span>Дедлайн выполнения</span>
                             <input type="datetime-local" value={datetime} onChange={event => setDatetime(event.target.value)}/>
                         </div>
+                        <div className={classes.header__listInput__title}>
+                            <span>Название формы</span>
+                            <input type="text" value={titleForm} onChange={event => setTitleForm(event.target.value)}/>
+                        </div>
+                        <MyButton 
+                            text={<i class="fa-solid fa-floppy-disk"></i>} 
+                            click={() => updateTitleForm()}
+                            otherStyle={{paddingLeft: "0.9rem", paddingRight: "0.9rem"}}>
+                        </MyButton>
                     </div>
                     <div className={classes.header__listBtn}>
                         <MyButton text={'Предпросмотр'} backgroundColor={'rgb(225, 225, 225)'} toggle={"modal"} target={"#previewModal"}/>
@@ -238,7 +286,7 @@ const NewForm = () => {
                                 <div 
                                     className={classes.content__newForm__list__item} 
                                     key={i} 
-                                    id={i}
+                                    id={item.order}
                                     draggable="true" 
                                     onDragOver={(event) => {event.preventDefault()}}
                                     onDragStart={(event) => {
@@ -251,19 +299,7 @@ const NewForm = () => {
                                             setDropElem(Number(event.target.id))
                                         }
                                     }}
-                                    onDrop={() => {                                       
-                                        const currentElem = listBlock[dragElem]
-                                        const tNewForm = [...listBlock]
-                                        if (dragElem > dropElem) {
-                                            tNewForm.splice(dropElem, 0, currentElem)
-                                            tNewForm.splice(dragElem + 1, 1)
-                                        }
-                                        else {
-                                            tNewForm.splice(dropElem + 1, 0, currentElem)
-                                            tNewForm.splice(dragElem, 1)
-                                        }   
-                                        setListBlock(tNewForm)
-                                    }}
+                                    onDrop={() => updateOrderBlock()}
                                 >
                                     <div className={classes.content__newForm__list__item__answer}>
                                         <span>{item.question}</span>
@@ -272,6 +308,7 @@ const NewForm = () => {
                                                 return typeItem.text
                                             }
                                         })}</span>
+                                        <span>{item.order}</span>
                                     </div>
                                     <div className={classes.content__newForm__list__item__btn}>
                                         <i class="fa-solid fa-pen" data-bs-toggle="modal" data-bs-target="#answerModal" onClick={() => {editAnswerByForm(item.id)}}></i>

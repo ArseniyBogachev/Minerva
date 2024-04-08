@@ -64,6 +64,25 @@ async function updateBlockApi(token, blockId, data) {
     catch (e) {
         return e
     }
+};
+
+async function updateOrderBlockApi(token, formId, data) {
+    try {
+        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${formId}/moveTo`,
+        {
+            "new_order": data.new,
+            "old_order": data.old
+        },
+        {
+            headers: {
+                "Authorization": `Token ${token}`,
+            }
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
 }
 
 async function saveFormApi(token) {
@@ -84,4 +103,4 @@ async function saveFormApi(token) {
     }
 };
 
-export { addFormBlockApi, listFormBlockApi, saveFormApi, updateBlockApi }
+export { addFormBlockApi, listFormBlockApi, saveFormApi, updateBlockApi, updateOrderBlockApi }

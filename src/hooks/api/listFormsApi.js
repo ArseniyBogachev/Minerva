@@ -47,4 +47,22 @@ async function removeFormApi(token, formId) {
     }
 };
 
-export { listFormsApi, createFormApi, removeFormApi };
+async function updateTitleFormApi(token, formId, title) {
+    try {
+        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${formId}/setTitle`, 
+        {
+            title: title
+        },
+        {
+            headers: {
+                "Authorization": `Token ${token}`,
+            },
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
+};
+
+export { listFormsApi, createFormApi, removeFormApi, updateTitleFormApi };

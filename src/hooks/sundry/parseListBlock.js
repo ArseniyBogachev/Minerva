@@ -1,3 +1,7 @@
+// function sortListBlock(data) {
+//     return data.sort((itemOne, itemTwo) => itemOne.order - itemTwo.order)
+// };
+
 function responseDataToListBlock(data) {
     const result = []
 
@@ -24,7 +28,7 @@ function responseDataToListBlock(data) {
         result.push(newParam)
     }
 
-    return result
-}
+    return result.sort((itemOne, itemTwo) => itemOne.order - itemTwo.order)
+};
 
 export { responseDataToListBlock }

@@ -26,26 +26,6 @@ const ViewForm = () => {
             const responseBlocks = await listFormBlockApi(cookies.token, formId);
 
             if (responseBlocks.status === 200 && responseForms.status === 200 && responseBlocks.data) {
-                // let responseToNewForm = {};
-                // const result = {
-                //     title: responseForms.data.find(item => item.id === formId).title,
-                //     questions: [],
-                //     answers: []
-                // }
-
-                // for (let item of responseBlocks.data) {
-                //     responseToNewForm["id"] = item.id;
-
-                //     for (let block of item.data) {
-                //         responseToNewForm[block.Key] = block.Value
-                //     };
-
-                //     result.questions.push(responseToNewForm);
-                //     result.answers.push(
-                //         {id: item.id, answer: []}
-                //     )
-                //     responseToNewForm = {};
-                // }; 
                 const listBlocks = responseDataToListBlock(responseBlocks.data);
 
                 setQuestions(listBlocks)
