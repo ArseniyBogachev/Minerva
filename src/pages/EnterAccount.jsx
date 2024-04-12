@@ -42,8 +42,8 @@ const EnterAccount = () => {
             // email: email,
             // phone: phone,
             login: login,
-            // surname: surname,
-            // patronymic: patronymic,
+            // first_name: surname,
+            // last_name: patronymic,
             password: password,
             repiedPassword: repiedPassword
         });
@@ -59,7 +59,8 @@ const EnterAccount = () => {
             });
             setCookie("token", response.data.token);
             cleanState();
-            navigate("/");
+            window.location.reload();
+            // navigate("/");
         }
         else {
             console.log("Error")
@@ -75,7 +76,8 @@ const EnterAccount = () => {
             setUser({
                 login: login
             })
-            navigate("/")
+            window.location.reload();
+            // navigate("/")
             // window.location.reload()
         }
         else {
@@ -123,8 +125,8 @@ const EnterAccount = () => {
                                 <MyInput placeholder={"Номер телефона"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={phone} change={setPhone}/>
                                 <div className={classes.content__wrapper__register__body__fio}>
                                     <MyInput placeholder={"Логин"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={login} change={setLogin}/>
-                                    <MyInput placeholder={"Фамилия"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={surname} change={setSurname}/>
-                                    <MyInput placeholder={"Отчество (при наличии)"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={patronymic} change={setPatronymic}/>
+                                    <MyInput placeholder={"Имя"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={surname} change={setSurname}/>
+                                    <MyInput placeholder={"Фамилия"} otherMainStyle={{width: "32%", height: "100%"}} otherInputStyle={{width: "100%"}} value={patronymic} change={setPatronymic}/>
                                 </div>                                
                                 <MyInput type={'password'} placeholder={"Пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={password} change={setPassword}/>
                                 <MyInput type={'password'} placeholder={"Повторите пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={repiedPassword} change={setRepiedPassword}/>

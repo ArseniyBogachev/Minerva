@@ -16,6 +16,22 @@
     height: 70%;
     box-shadow: 0 0 5px 1px rgb(200, 200, 200);
     padding: 1.5%;
+    position: relative;
+    &__linkAdmin {
+        position: absolute;
+        bottom: 103%;
+        left: 10px;
+        span {
+            font-size: 15px;
+            font-family: "Montserrat", sans-serif;
+            color: rgb(100, 100, 100);
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+                color: rgb(66, 68, 189);
+            }
+        }
+    }
     &__wrapper {
         &__header {
             width: 100%;

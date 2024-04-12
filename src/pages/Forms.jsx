@@ -5,7 +5,7 @@ import classes from "../assets/styles/forms.module.scss"
 import MyButton from "../components/MyButton.jsx";
 import MyInput from "../components/MyInput.jsx";
 import { FormsData, UserData } from "../context";
-import { listFormsApi, createFormApi, removeFormApi } from "../hooks/api/listFormsApi.js";
+import { listFormsApi, createFormApi, removeFormApi, newFormTokenApi } from "../hooks/api/listFormsApi.js";
 
 const Forms = () => {
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Forms = () => {
 
     useEffect(() => {
         async function listForms() {
-            const response = await listFormsApi(cookies.token)
+            const response = await listFormsApi(cookies.token);
 
             if (response.data) {
                 setForms(response.data)
@@ -35,10 +35,13 @@ const Forms = () => {
 
     async function createForm() {
         setStateLoading(true);
-        const response = await createFormApi(cookies.token)
+        const response = await createFormApi(cookies.token);
+        console.log("response", response)
         setStateLoading(false);
 
         if (response.data) {
+            const token = await newFormTokenApi(cookies.token, response.data.id)
+            console.log("token", token)
             navigate(`/forms/${response.data.id}/edit`)
         }
         else {

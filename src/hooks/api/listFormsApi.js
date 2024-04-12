@@ -3,7 +3,7 @@ import axios from "axios";
 
 async function listFormsApi(token) {
     try {
-        const response = await axios.get("http://localhost:8080/formBuilder/list", {
+        const response = await axios.get("https://api.minerva.krbl.ru/formBuilder/list", {
             headers: {
                 "Authorization": `Token ${token}`,
             }
@@ -17,7 +17,7 @@ async function listFormsApi(token) {
 
 async function createFormApi(token) {
     try {
-        const response = await axios.post("http://localhost:8080/formBuilder/new",
+        const response = await axios.post("https://api.minerva.krbl.ru/formBuilder/new",
         {
             title: "Новая форма"
         },
@@ -35,7 +35,7 @@ async function createFormApi(token) {
 
 async function removeFormApi(token, formId) {
     try {
-        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${formId}/delete`, {
+        const response = await axios.post(`https://api.minerva.krbl.ru/formBuilder/edit/${formId}/delete`, {
             headers: {
                 "Authorization": `Token ${token}`,
             },
@@ -49,7 +49,7 @@ async function removeFormApi(token, formId) {
 
 async function updateTitleFormApi(token, formId, title) {
     try {
-        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${formId}/setTitle`, 
+        const response = await axios.post(`https://api.minerva.krbl.ru/formBuilder/edit/${formId}/setTitle`, 
         {
             title: title
         },
@@ -65,4 +65,19 @@ async function updateTitleFormApi(token, formId, title) {
     }
 };
 
-export { listFormsApi, createFormApi, removeFormApi, updateTitleFormApi };
+async function newFormTokenApi(token, formId) {
+    try {
+        const response = await axios.post(`https://api.minerva.krbl.ru/formBuilder/edit/${formId}/access/new`,
+        {
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
+};
+
+export { listFormsApi, createFormApi, removeFormApi, updateTitleFormApi, newFormTokenApi };

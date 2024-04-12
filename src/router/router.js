@@ -7,6 +7,7 @@ import Home from "../pages/Home.jsx";
 import App from "../App.jsx";
 import Profile from "../pages/Profile.jsx";
 import ViewForm from "../pages/ViewForm.jsx";
+import AdminPanel from '../pages/AdminPanel.jsx';
 
 const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
             {
                 path: "/forms/:formId",
                 element: <ViewForm/>
+            },
+            {
+                path: "/admin",
+                element: <AdminPanel/>
             }
         ]
     }

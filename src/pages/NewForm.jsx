@@ -65,8 +65,8 @@ const NewForm = () => {
                 setTitleForm(responseForms.data.find(item => item.id === formId).title);
             }
             else {
-                console.log(responseBlock);
-                console.log(responseForms);
+                setListBlock([])
+                setTitleForm("Новыя форма")
             }
         };
 
@@ -308,7 +308,6 @@ const NewForm = () => {
                                                 return typeItem.text
                                             }
                                         })}</span>
-                                        <span>{item.order}</span>
                                     </div>
                                     <div className={classes.content__newForm__list__item__btn}>
                                         <i class="fa-solid fa-pen" data-bs-toggle="modal" data-bs-target="#answerModal" onClick={() => {editAnswerByForm(item.id)}}></i>

@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import classes from "../assets/styles/profile.module.scss";
 import MyButton from "../components/MyButton.jsx";
 import { UserData } from "../context";
@@ -9,8 +10,6 @@ const Profile = () => {
     const [edit, setEdit] = useState(true);
     const {user, setUser} = useContext(UserData);
 
-    console.log(user)
-
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [login, setLogin] = useState("");
@@ -18,9 +17,9 @@ const Profile = () => {
     const [last_name, setLast_name] = useState("");
 
     const [cookies, _, __] = useCookies(["user"]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(1)
         async function verifyUser() {
             const response = await verifyUserApi(cookies.token);
 
@@ -78,6 +77,9 @@ const Profile = () => {
         <div className={classes.main}>
             <div className={classes.wrapper}>
                 <div className={classes.profile}>
+                    <div className={classes.profile__linkAdmin}>
+                        <span onClick={() => navigate("/admin")}>Админ панель</span>
+                    </div>
                     <div className={classes.profile__wrapper}>
                         <div className={classes.profile__wrapper__header}>
                             <h3>Ваши данные</h3>

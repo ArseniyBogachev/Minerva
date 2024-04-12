@@ -2,7 +2,7 @@ import axios from "axios";
 
 async function listFormBlockApi(token, formId) {
     try {
-        const response = await axios.get(`http://localhost:8080/formBuilder/edit/${formId}/list`,
+        const response = await axios.get(`https://api.minerva.krbl.ru/formBuilder/edit/${formId}/list`,
         {
             headers: {
                 "Authorization": `Token ${token}`,
@@ -17,7 +17,7 @@ async function listFormBlockApi(token, formId) {
 
 async function addFormBlockApi(token, formId, data) {
     try {
-        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${formId}/add`,
+        const response = await axios.post(`https://api.minerva.krbl.ru/formBuilder/edit/${formId}/add`,
         {
             data: data
         },
@@ -50,7 +50,7 @@ async function addFormBlockApi(token, formId, data) {
 
 async function updateBlockApi(token, blockId, data) {
     try {
-        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${blockId}/set`,
+        const response = await axios.post(`https://api.minerva.krbl.ru/formBuilder/edit/${blockId}/set`,
         {
             data: data
         },
@@ -68,7 +68,7 @@ async function updateBlockApi(token, blockId, data) {
 
 async function updateOrderBlockApi(token, formId, data) {
     try {
-        const response = await axios.post(`http://localhost:8080/formBuilder/edit/${formId}/moveTo`,
+        const response = await axios.post(`https://api.minerva.krbl.ru/formBuilder/edit/${formId}/moveTo`,
         {
             "new_order": data.new,
             "old_order": data.old
@@ -87,7 +87,7 @@ async function updateOrderBlockApi(token, formId, data) {
 
 async function saveFormApi(token) {
     try {
-        const response = await axios.post("http://localhost:8080/formBuilder/new",
+        const response = await axios.post("https://api.minerva.krbl.ru/formBuilder/new",
         {
             title: "Новая форма"
         },

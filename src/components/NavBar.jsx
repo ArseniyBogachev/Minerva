@@ -1,7 +1,28 @@
-import React, { useState } from "react";
-import classes from "../assets/styles/components/navbar.module.scss"
+import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import classes from "../assets/styles/components/navbar.module.scss";
+import { verifyUserApi } from "../hooks/api/enterAccountApi";
 
 const NavBar = ({navigate, auth, setAuth}) => {
+    // const [cookies, _, __] = useCookies(["user"]);
+
+    // useEffect(() => {
+    //     async function verifyUser() {
+    //         const response = await verifyUserApi(cookies.token);
+
+    //         if (response) {
+    //             if (response.status === 200) {
+    //                 setAuth(response.data);
+    //             }
+    //             else {
+    //                 console.log(response)
+    //             }
+    //         }
+    //     }
+
+    //     verifyUser()
+    // }, []);
+
     return (
         <div className={classes.main}>
             <div className={classes.wrapper}>
@@ -9,7 +30,7 @@ const NavBar = ({navigate, auth, setAuth}) => {
                     <div className={classes.menu__authorized}>
                         <span onClick={() => navigate("/")}>Главная</span>
                         {auth ? 
-                        <span onClick={() => navigate("/forms")}>Мои формы</span> :
+                        auth.is_admin ? <span onClick={() => navigate("/forms")}>Мои формы</span> : <span></span> :
                         <span></span>}
                     </div>                   
                 </div>
