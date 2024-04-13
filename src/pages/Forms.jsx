@@ -5,7 +5,7 @@ import classes from "../assets/styles/forms.module.scss"
 import MyButton from "../components/MyButton.jsx";
 import MyInput from "../components/MyInput.jsx";
 import { FormsData, UserData } from "../context";
-import { listFormsApi, createFormApi, removeFormApi, newFormTokenApi } from "../hooks/api/listFormsApi.js";
+import { listFormsApi, createFormApi, removeFormApi, newFormTokenApi, listFormsByTokenApi } from "../hooks/api/listFormsApi.js";
 
 const Forms = () => {
     const navigate = useNavigate();
@@ -20,10 +20,10 @@ const Forms = () => {
             const response = await listFormsApi(cookies.token);
 
             if (response.data) {
-                setForms(response.data)
+                setForms(response.data);
             }
             else if (response.status === 200 && response.data) {
-                setForms([])
+                setForms([]);
             }
             else {
                 console.log(response)
@@ -41,7 +41,7 @@ const Forms = () => {
 
         if (response.data) {
             const token = await newFormTokenApi(cookies.token, response.data.id)
-            console.log("token", token)
+
             navigate(`/forms/${response.data.id}/edit`)
         }
         else {
@@ -54,22 +54,32 @@ const Forms = () => {
     };
 
     async function removeForm(id) {
-        setForms([...forms.filter(item => item.id !== id)]);
-        // const response = await removeFormApi(cookies.token, id)
+        const response = await removeFormApi(cookies.token, id)
 
-        // if (response.status === 200) {
-        //     setForms([...forms.filter(item => item.id !== id)]);
-        // }
-        // else {
-        //     console.log(response)
-        // }
+        if (response.status === 200) {
+            setForms([...forms.filter(item => item.id !== id)]);
+        }
+        else {
+            console.log(response)
+        }
     };
+
+    async function openFormView(formId) {
+        const response = await listFormsByTokenApi(cookies.token, formId);
+
+        if (response.status === 200) {
+            navigate(`/forms/${response.data.tokens[0].id}/`);
+        }
+        else {
+            console.log(response)
+        }
+    }
 
     return (
         <div className={classes.main}>
             <div className={classes.wrapper}>
                 <div className={classes.panel}>
-                    <MyInput placeholder={'Поиск...'}/>
+                    {/* <MyInput placeholder={'Поиск...'}/> */}
                     <MyButton click={createForm} otherStyle={{width: '200px'}} text={
                         stateLoading ? <div class="spinner-border text-light" role="status">
                             <span class="visually-hidden">Загрузка...</span>
@@ -90,7 +100,8 @@ const Forms = () => {
                                 <div className={classes.listForms__forms__item__update}>{item.update}</div> */}
                                 <i class="fa-solid fa-ellipsis-vertical" id="action" data-bs-toggle="dropdown"></i>
                                 <ul class="dropdown-menu" aria-labelledby="action">
-                                    <li><a class="dropdown-item" onClick={() => navigate(`/forms/${item.id}/`)}>Открыть</a></li>
+                                    <li><a class="dropdown-item" onClick={() => openFormView(item.id)}>Открыть</a></li>
+                                    <li><a class="dropdown-item" onClick={() => navigate(`/forms/${item.id}/answers`)}>Ответы</a></li>
                                     <li><a class="dropdown-item" onClick={() => navigator.clipboard.writeText(`http://localhost:3000/forms/${item.id}/`)}>Скопировать ссылку</a></li>
                                     <li><a class="dropdown-item" onClick={() => removeForm(item.id)}>Удалить</a></li>
                                 </ul>

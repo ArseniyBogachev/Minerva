@@ -5,6 +5,7 @@ import MyButton from "../components/MyButton.jsx";
 import { UserData } from "../context";
 import { useCookies } from "react-cookie";
 import { verifyUserApi } from "../hooks/api/enterAccountApi.js";
+import { editUserApi } from "../hooks/api/profileApi.js";
 
 const Profile = () => {
     const [edit, setEdit] = useState(true);
@@ -16,7 +17,7 @@ const Profile = () => {
     const [first_name, setFirst_name] = useState("");
     const [last_name, setLast_name] = useState("");
 
-    const [cookies, _, __] = useCookies(["user"]);
+    const [cookies, setCookies, removeCookies] = useCookies(["user"]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,7 +43,6 @@ const Profile = () => {
     }, [])
 
     function choiceInput(key) {
-        console.log(2)
         switch (key) {
             case "email":
                 return {get: email, set: setEmail}
@@ -57,40 +57,68 @@ const Profile = () => {
         }
     }
 
-    function editUser() {
+    async function editUser() {
         if (edit) {
             setEdit(!edit)
+
         }
         else {
-            setUser({
+            const response = await editUserApi(cookies.token, {
                 login: login,
                 first_name: first_name,
                 last_name: last_name,
                 email: email,
                 phone: phone,
+                is_admin: user.is_admin
             })
-            setEdit(!edit)
+
+            if (response.status === 200) {
+                setUser({
+                    login: login,
+                    first_name: first_name,
+                    last_name: last_name,
+                    email: email,
+                    phone: phone,
+                })
+                setEdit(!edit)
+            }
+            
         }        
+    };
+
+    function exitAccount() {
+        removeCookies("token");
+        setUser(false);
+        navigate("/");
     }
 
     return (
         <div className={classes.main}>
             <div className={classes.wrapper}>
                 <div className={classes.profile}>
-                    <div className={classes.profile__linkAdmin}>
+                    {/* {user.is_admin ? <div className={classes.profile__linkAdmin}>
                         <span onClick={() => navigate("/admin")}>Админ панель</span>
-                    </div>
+                    </div> : <div></div>} */}
                     <div className={classes.profile__wrapper}>
                         <div className={classes.profile__wrapper__header}>
                             <h3>Ваши данные</h3>
-                            <MyButton 
-                                text={
-                                    edit ? 
-                                    <span>Редактировать <i class="fa-solid fa-pen"></i></span> : 
-                                    <span>Сохранить <i class="fa-solid fa-floppy-disk"></i></span>
-                                } 
-                                backgroundColor={edit ? "rgb(200, 200, 200)" : ""}
-                                click={() => editUser()}/>
+                            <div className={classes.profile__wrapper__header__btn}>
+                                {user.is_admin ? <MyButton 
+                                    text={
+                                        edit ? 
+                                        <span>Редактировать <i class="fa-solid fa-pen"></i></span> : 
+                                        <span>Сохранить <i class="fa-solid fa-floppy-disk"></i></span>
+                                    } 
+                                    backgroundColor={edit ? "rgb(200, 200, 200)" : ""}
+                                    click={() => editUser()}/>  : <div>Запросите изменение профиля у администратора</div>}
+                                <MyButton 
+                                    text={
+                                        <span>Выйти</span>
+                                    } 
+                                    backgroundColor={edit ? "rgb(252, 151, 151)" : ""}
+                                    click={() => exitAccount()}/>
+                            </div>
+                            
                         </div>
                         <div className={classes.profile__wrapper__body}>
                             {Object.keys(user).map(key => key !== "is_admin" ? <div className={classes.profile__wrapper__body__item}>

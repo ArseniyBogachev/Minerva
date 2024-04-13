@@ -4,6 +4,9 @@ const protectedUrl = {
         "/forms/edit",
         "/profile"
     ],
+    Authorized: [
+        "enter"
+    ],
     notRights: [
 
     ]

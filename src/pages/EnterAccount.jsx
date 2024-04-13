@@ -5,7 +5,7 @@ import classes from "../assets/styles/enterAccount.module.scss";
 import MyInput from "../components/MyInput.jsx";
 import MyButton from "../components/MyButton.jsx";
 import { UserData } from "../context";
-import { logIn, completeRegistration } from "../hooks/api/enterAccountApi.js";
+import { logIn, completeRegistration, verifyUserApi } from "../hooks/api/enterAccountApi.js";
 
 const EnterAccount = () => {
     const [enter, setEnter] = useState("login");
@@ -39,11 +39,7 @@ const EnterAccount = () => {
 
     async function createUser() {
         const response = await completeRegistration({
-            // email: email,
-            // phone: phone,
             login: login,
-            // first_name: surname,
-            // last_name: patronymic,
             password: password,
             repiedPassword: repiedPassword
         });
@@ -57,7 +53,7 @@ const EnterAccount = () => {
                 patronymic: patronymic,
                 password: password,
             });
-            setCookie("token", response.data.token);
+            setCookie("token", response.data.token);     
             cleanState();
             window.location.reload();
             // navigate("/");
@@ -73,9 +69,9 @@ const EnterAccount = () => {
         if (response.status === 200) {
             setCookie("token", response.data.token);
             cleanState();
-            setUser({
-                login: login
-            })
+            // setUser({
+            //     login: login
+            // })
             window.location.reload();
             // navigate("/")
             // window.location.reload()
@@ -121,6 +117,11 @@ const EnterAccount = () => {
                                 <h3>Зарегестрировать учетную запись</h3>
                             </div>
                             <div className={classes.content__wrapper__register__body}>
+                                <MyInput placeholder={"Логин"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={login} change={setLogin}/>
+                                <MyInput type={"password"} placeholder={"Пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={password} change={setPassword}/>
+                                <MyInput type={'password'} placeholder={"Повторите пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={repiedPassword} change={setRepiedPassword}/>
+                            </div>
+                            {/* <div className={classes.content__wrapper__register__body}>
                                 <MyInput placeholder={"Email"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={email} change={setEmail}/>
                                 <MyInput placeholder={"Номер телефона"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={phone} change={setPhone}/>
                                 <div className={classes.content__wrapper__register__body__fio}>
@@ -130,7 +131,7 @@ const EnterAccount = () => {
                                 </div>                                
                                 <MyInput type={'password'} placeholder={"Пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={password} change={setPassword}/>
                                 <MyInput type={'password'} placeholder={"Повторите пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={repiedPassword} change={setRepiedPassword}/>
-                            </div>
+                            </div> */}
                             <div className={classes.content__wrapper__register__footer}>
                                 <MyButton text={"Создать"} otherStyle={{height: "100%", width: "20%"}} click={() => createUser()}/>
                             </div>

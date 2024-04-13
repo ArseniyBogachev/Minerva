@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { FormsData, UserData, TypeAnswerData } from "./context";
+import { FormsData, UserData, TypeAnswerData, answersData } from "./context";
 import { useCookies } from "react-cookie";
 import { globalRender } from "./router/protectedRouting.js";
 import { verifyUserApi } from "./hooks/api/enterAccountApi.js"
@@ -20,6 +20,7 @@ const App = () => {
     const navigate = useNavigate();
     const [forms, setForms] = useState([]);
     const [user, setUser] = useState(false);
+    const [answersList, setAnswersList] = useState([]);
     const [listTypeAnswer, setListTypeAnswer] = useState([
         {id: 1, text: 'Краткий ответ', typeTag: InputText},
         {id: 2, text: 'Расширенный ответ', typeTag: TextArea},
@@ -48,25 +49,27 @@ const App = () => {
             }
         }
 
-        verifyUser()
+        verifyUser();
     }, [])
 
     return (
         <UserData.Provider value={{ user, setUser }}>
-            <FormsData.Provider value={{ forms, setForms }}>
-                <TypeAnswerData.Provider value={{ listTypeAnswer, setListTypeAnswer }}>
-                    <div className={classes.main}>
-                        <div className={classes.container}>
-                            <div className={classes.header}>
-                                <NavBar navigate={navigate} auth={user} setAuth={setUser}/>                   
-                            </div>
-                            <div className={classes.content}>
-                                <Outlet/>
+            <answersData.Provider value={{ answersList, setAnswersList }}>
+                <FormsData.Provider value={{ forms, setForms }}>
+                    <TypeAnswerData.Provider value={{ listTypeAnswer, setListTypeAnswer }}>
+                        <div className={classes.main}>
+                            <div className={classes.container}>
+                                <div className={classes.header}>
+                                    <NavBar navigate={navigate} auth={user} setAuth={setUser}/>                   
+                                </div>
+                                <div className={classes.content}>
+                                    <Outlet/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </TypeAnswerData.Provider>
-            </FormsData.Provider>  
+                    </TypeAnswerData.Provider>
+                </FormsData.Provider>  
+            </answersData.Provider>
         </UserData.Provider>      
     )
 }

@@ -103,26 +103,28 @@ const NewForm = () => {
             typeAnswer: currentTypeAnswer,
         }
 
-        // const response = await updateBlockApi(cookies.token, stateModal, data);
+        console.log(stateModal)
 
-        // if (response.status === 200) {
-        //     setListBlock(listBlock.map(item => {
-        //         if (item.id === stateModal) {
-        //             item = data
-        //         }
-        //         return item
-        //     }))
-        // }
-        // else {
-        //     console.log(response)
-        // }
+        const response = await updateBlockApi(cookies.token, stateModal, data);
 
-        setListBlock(listBlock.map(item => {
-            if (item.id === stateModal) {
-                item = data
-            }
-            return item
-        }))
+        if (response.status === 200) {
+            setListBlock(listBlock.map(item => {
+                if (item.id === stateModal) {
+                    item = data
+                }
+                return item
+            }))
+        }
+        else {
+            console.log(response)
+        }
+
+        // setListBlock(listBlock.map(item => {
+        //     if (item.id === stateModal) {
+        //         item = data
+        //     }
+        //     return item
+        // }))
      
         cleanStates();
     };

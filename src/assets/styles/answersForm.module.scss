@@ -1,0 +1,107 @@
+.main {
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.answers {
+    width: 70%;
+    height: 70%;
+    box-shadow: 0 0 5px 1px rgb(200, 200, 200);
+    padding: 1.5%;
+    position: relative;
+    &__linkAdmin {
+        position: absolute;
+        bottom: 103%;
+        left: 10px;
+        span {
+            font-size: 15px;
+            font-family: "Montserrat", sans-serif;
+            color: rgb(100, 100, 100);
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+                color: rgb(66, 68, 189);
+            }
+        }
+    }
+    &__wrapper {
+        &__header {
+            width: 100%;
+            height: 15%;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            margin-bottom: 10px;
+            h3 {
+                font-size: 25px;
+                font-family: "Montserrat", sans-serif;
+                color: rgb(100, 100, 100);
+            }
+        }
+        &__body {
+            width: 100%;
+            height: 85%;
+            &__item {
+                padding: 5px;
+                border-bottom: 1px solid rgb(200, 200, 200);
+                font-size: 15px;
+                font-family: "Montserrat", sans-serif;
+                cursor: pointer;
+                // &__question {
+                //     &__text {
+                //         font-size: 15px;
+                //         font-family: "Montserrat", sans-serif;
+                //     }   
+                //     &__comment {
+                //         font-size: 11px;
+                //         font-family: "Montserrat", sans-serif;
+                //         font-style: italic;
+                //         color: rgb(200, 200, 200);
+                //     }
+                // }
+                // &__answer {
+                //     &__text {
+                //         font-size: 15px;
+                //         font-family: "Montserrat", sans-serif;
+                //     }
+                // }
+            }
+        }
+    }
+}
+
+.myModal {
+    &__item {
+        padding: 5px;
+        border-bottom: 1px solid rgb(200, 200, 200);
+        font-size: 15px;
+        font-family: "Montserrat", sans-serif;
+        cursor: pointer;
+        &__question {
+            &__text {
+                font-size: 15px;
+                font-family: "Montserrat", sans-serif;
+            }   
+            &__comment {
+                font-size: 11px;
+                font-family: "Montserrat", sans-serif;
+                font-style: italic;
+                color: rgb(200, 200, 200);
+            }
+        }
+        &__answer {
+            &__text {
+                font-size: 15px;
+                font-family: "Montserrat", sans-serif;
+            }
+        }
+    }
+}

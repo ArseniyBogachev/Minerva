@@ -33,26 +33,11 @@ async function addFormBlockApi(token, formId, data) {
     }
 };
 
-// function removeFormApi(id) {
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             if (true) {
-//                 resolve({
-//                     id: id
-//                 })
-//             }
-//             else {
-//                 reject("Error")
-//             } 
-//         }, 200)
-//     })
-// };
-
 async function updateBlockApi(token, blockId, data) {
     try {
         const response = await axios.post(`https://api.minerva.krbl.ru/formBuilder/edit/${blockId}/set`,
         {
-            data: data
+            "data": data
         },
         {
             headers: {
@@ -103,4 +88,49 @@ async function saveFormApi(token) {
     }
 };
 
-export { addFormBlockApi, listFormBlockApi, saveFormApi, updateBlockApi, updateOrderBlockApi }
+async function listFormBlockByTokenApi(token, formToken) {
+    try {
+        const response = await axios.get(`https://api.minerva.krbl.ru/form/${formToken}/get`,
+        {
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
+};
+
+async function saveAnswersApi(token, formToken, data) {
+    try {
+        const response = await axios.post(`https://api.minerva.krbl.ru/form/${formToken}/submit`, {"data": data},
+        {
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
+};
+
+async function getAnswersApi(token, formToken) {
+    try {
+        const response = await axios.get(`https://api.minerva.krbl.ru/formBuilder/edit/${formToken}/answers`,
+        {
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        })
+        return response
+    }
+    catch (e) {
+        return e
+    }
+};
+
+export { addFormBlockApi, listFormBlockApi, saveFormApi, updateBlockApi, updateOrderBlockApi, listFormBlockByTokenApi, saveAnswersApi, getAnswersApi }

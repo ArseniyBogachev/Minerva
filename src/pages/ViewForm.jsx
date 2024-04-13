@@ -2,40 +2,41 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import classes from "../assets/styles/viewForm.module.scss";
-import { FormsData, TypeAnswerData } from "../context";
+import { FormsData, TypeAnswerData, answersData, UserData } from "../context";
 import GeneratingFormFields from "../components/GeneratingFormFields.jsx";
 import MyButton from "../components/MyButton.jsx";
-import { listFormBlockApi } from "../hooks/api/formApi.js";
+import { listFormBlockApi, listFormBlockByTokenApi, saveAnswersApi } from "../hooks/api/formApi.js";
 import { listFormsApi } from "../hooks/api/listFormsApi.js";
 import { responseDataToListBlock } from "../hooks/sundry/parseListBlock.js";
 
 const ViewForm = () => {
     const navigate = useNavigate();
     const { formId } = useParams();
+    const {user, setUser} = useContext(UserData);
     const {forms, setForms} = useContext(FormsData);
+    const {answersList, setAnswersList} = useContext(answersData);
     const {listTypeAnswer, setListTypeAnswer} = useContext(TypeAnswerData);
-    const [cookies, _, __] = useCookies(["user"]);
+    const [cookies, setCookies, __] = useCookies(["user"]);
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
-    const [title, setTitle] = useState("");
-    
+    // const [title, setTitle] = useState("");
 
     useEffect(() => {
         async function getForm() {
-            const responseForms = await listFormsApi(cookies.token);
-            const responseBlocks = await listFormBlockApi(cookies.token, formId);
+            // const responseForms = await listFormsApi(cookies.token);
+            const responseBlocks = await listFormBlockByTokenApi(cookies.token, formId);
 
-            if (responseBlocks.status === 200 && responseForms.status === 200 && responseBlocks.data) {
-                const listBlocks = responseDataToListBlock(responseBlocks.data);
+            if (responseBlocks.status === 200 && responseBlocks.data) {
+                const listBlocks = responseDataToListBlock(responseBlocks.data.blocks);
 
                 setQuestions(listBlocks)
                 setAnswers(listBlocks.map(item => (
                     {id: item.id, answer: []}
                 )))
-                setTitle(responseForms.data.find(item => item.id === formId).title)
+                // setTitle(responseForms.data.find(item => item.id === formId).title)
             }
             else {
-                console.log(responseForms)
+                // console.log(responseForms)
                 console.log(responseBlocks)
             }
         };
@@ -54,16 +55,20 @@ const ViewForm = () => {
         )
     };
 
-    function saveAnswers() {
-        // saveAnswersApi(formId, answers)
-        //     .then((resolve, _) => {
-        //         console.log(resolve)
-        //         setAnswers([]);
-        //         navigate("/");
-        //     })
-        //     .catch((error) => console.log(error));
-        setAnswers([]);
-        navigate("/forms");
+    async function saveAnswers() {
+        const response = await saveAnswersApi(cookies.token, formId, answers);
+        console.log(response)
+
+        if (response.status === 200) {
+            setAnswersList([...answersList, {
+                id: formId,
+                user: user.login,
+                answers: answers
+            }])
+
+            setAnswers([]);
+            navigate("/forms");
+        }
     }
 
     return (
@@ -72,9 +77,6 @@ const ViewForm = () => {
             <div className={classes.wrapper}>
                 <div className={classes.form}>
                     <div className={classes.form__header}>
-                        <div className={classes.form__header__title}>
-                            <span>{title}</span>
-                        </div>
                         <div className={classes.form__header__id}>
                             <span>#{formId}</span>
                         </div>
