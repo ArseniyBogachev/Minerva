@@ -67,13 +67,24 @@ const Forms = () => {
     async function openFormView(formId) {
         const response = await listFormsByTokenApi(cookies.token, formId);
 
-        if (response.status === 200) {
+        if (response.status === 200 && response.data.tokens) {
             navigate(`/forms/${response.data.tokens[0].id}/`);
         }
         else {
             console.log(response)
         }
-    }
+    };
+
+    async function copyLinkToFormView(formId) {
+        const response = await listFormsByTokenApi(cookies.token, formId);
+
+        if (response.status === 200 && response.data.tokens) {
+            navigator.clipboard.writeText(`http://localhost:3000/forms/${response.data.tokens[0].id}/`)
+        }
+        else {
+            console.log(response)
+        }
+    };
 
     return (
         <div className={classes.main}>
@@ -102,7 +113,7 @@ const Forms = () => {
                                 <ul class="dropdown-menu" aria-labelledby="action">
                                     <li><a class="dropdown-item" onClick={() => openFormView(item.id)}>Открыть</a></li>
                                     <li><a class="dropdown-item" onClick={() => navigate(`/forms/${item.id}/answers`)}>Ответы</a></li>
-                                    <li><a class="dropdown-item" onClick={() => navigator.clipboard.writeText(`http://localhost:3000/forms/${item.id}/`)}>Скопировать ссылку</a></li>
+                                    <li><a class="dropdown-item" onClick={() => copyLinkToFormView(item.id)}>Скопировать ссылку</a></li>
                                     <li><a class="dropdown-item" onClick={() => removeForm(item.id)}>Удалить</a></li>
                                 </ul>
                             </div>

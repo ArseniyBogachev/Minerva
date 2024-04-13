@@ -60,7 +60,6 @@ const Profile = () => {
     async function editUser() {
         if (edit) {
             setEdit(!edit)
-
         }
         else {
             const response = await editUserApi(cookies.token, {
@@ -79,10 +78,10 @@ const Profile = () => {
                     last_name: last_name,
                     email: email,
                     phone: phone,
+                    is_admin: user.is_admin
                 })
                 setEdit(!edit)
-            }
-            
+            }           
         }        
     };
 
