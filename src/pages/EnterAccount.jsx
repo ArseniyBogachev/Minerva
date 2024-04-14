@@ -22,6 +22,9 @@ const EnterAccount = () => {
     const {user, setUser} = useContext(UserData);
     const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
+    const [loginError, setLoginError] = useState(false);
+    const [regsterError, setRegsterError] = useState(false);
+
     function cleanState() {
         setEmail("");
         setPhone("");
@@ -52,7 +55,7 @@ const EnterAccount = () => {
             navigate("/");
         }
         else {
-            console.log("Error")
+            setRegsterError(response)
         }
     };
 
@@ -68,7 +71,7 @@ const EnterAccount = () => {
             navigate("/")
         }
         else {
-            console.log(response)
+            setLoginError(true);
         }      
     }
 
@@ -92,6 +95,9 @@ const EnterAccount = () => {
                                 <h3>Войти в аккаунт</h3>
                             </div>
                             <div className={classes.content__wrapper__login__body}>
+                                {loginError ? <span className={classes.content__wrapper__login__body__error}>
+                                    Ошибка. Проверте корректность ввода логина и пароля.
+                                </span> : <span className={classes.content__wrapper__login__body__error}></span>}
                                 <MyInput placeholder={"Логин"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}} value={login} change={setLogin}/>
                                 <MyInput type={"password"} placeholder={"Пароль"} otherMainStyle={{width: "100%", height: "20%"}} otherInputStyle={{width: "100%"}} value={password} change={setPassword}/>
                             </div>
@@ -105,9 +111,12 @@ const EnterAccount = () => {
                         </div> : 
                         <div className={classes.content__wrapper__register}>
                             <div className={classes.content__wrapper__register__header}>
-                                <h3>Зарегестрировать учетную запись</h3>
+                                <h3>Зарегистрировать учетную запись</h3>
                             </div>
                             <div className={classes.content__wrapper__register__body}>
+                                {regsterError ? <span className={classes.content__wrapper__register__body__error}>
+                                    {regsterError}
+                                </span> : <span className={classes.content__wrapper__register__body__error}></span>}
                                 <MyInput placeholder={"Логин"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={login} change={setLogin}/>
                                 <MyInput type={"password"} placeholder={"Пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={password} change={setPassword}/>
                                 <MyInput type={'password'} placeholder={"Повторите пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={repiedPassword} change={setRepiedPassword}/>

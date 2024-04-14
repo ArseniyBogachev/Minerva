@@ -12,7 +12,9 @@ const constructorAnswerValidate = (state, messageReject = "Ошибка", messag
 
 const totalRegisterValidate = (data) => {
     const listValidation = [
-        constructorAnswerValidate(data.login.length, "Обязательное поле."),
+        constructorAnswerValidate(data.login.length, "Введите логин."),
+        constructorAnswerValidate(data.password.length, "Введите пароль."),
+        constructorAnswerValidate(data.repiedPassword.length, "Введите повторно пароль."),
         // constructorAnswerValidate(data.surname.length, "Обязательное поле."),
         // constructorAnswerValidate(data.email.length, "Обязательное поле."),
         // constructorAnswerValidate(data.phone.length, "Обязательное поле."),

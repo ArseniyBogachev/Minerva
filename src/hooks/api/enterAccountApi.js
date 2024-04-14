@@ -23,7 +23,7 @@ async function completeRegistration(data) {
             return response
         }
         catch (e) {
-            return e
+            return "Ошибка. Проверте корректность введенных данных."
         }
     }
     return validate.message

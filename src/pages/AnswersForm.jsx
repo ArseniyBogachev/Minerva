@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from 'react-router-dom';
 import { answersData } from "../context";
 import classes from "../assets/styles/answersForm.module.scss";
-import { responseDataToListBlock } from "../hooks/sundry/parseListBlock";
+import { responseDataToListBlock, dateTimeParse } from "../hooks/sundry/parseListBlock";
 import { listFormBlockApi, getAnswersApi } from "../hooks/api/formApi";
 import { listUsersApi } from "../hooks/api/adminApi";
 
@@ -29,6 +29,7 @@ const AnswersForm = () => {
                     for (let item of responseAnswers.data) {
                         const blocks = {
                             user: listUsers.data.find(user => user.id === item.user_id).login,
+                            date: dateTimeParse(item.date),
                             block: []
                         }
 
@@ -67,11 +68,19 @@ const AnswersForm = () => {
                             <h3>Ответы</h3>
                         </div>
                         <div className={classes.answers__wrapper__body}>
+                            <div className={classes.answers__wrapper__body__column}>
+                                <div>Логин</div>
+                                <div>Дата</div>
+                            </div>
+
                             {data ? 
                                 data.map((item, i) => 
                                     <div className={classes.answers__wrapper__body__item} key={i}>
                                         <div className={classes.answers__wrapper__body__item__user} data-bs-toggle={"modal"} data-bs-target={`#answersModal${i}`}>
                                             {item.user}
+                                        </div>
+                                        <div className={classes.answers__wrapper__body__item__date}>
+                                            {item.date}
                                         </div>
 
                                         <div class="modal fade myModal" className={classes.myModal} id={`answersModal${i}`} tabIndex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
@@ -87,7 +96,11 @@ const AnswersForm = () => {
                                                                 <p className={classes.myModal__item__question__comment}>{block.question.comment}</p>
                                                             </div>
                                                             <div className={classes.myModal__item__answer}>
-                                                                <p className={classes.myModal__item__question__text}>Ответ: {block.answers.answer}</p>
+                                                                <p className={classes.myModal__item__question__text}>Ответ: {
+                                                                    Array.isArray(block.answers.answer) ? 
+                                                                    block.answers.answer.map(item => <span>{item}; </span>) :
+                                                                    block.answers.answer
+                                                                }</p>
                                                             </div>
                                                         </div>)}
                                                     </div>
@@ -99,26 +112,13 @@ const AnswersForm = () => {
                                         </div>
                                     </div>
                                 )
-                            : <div>Ответов нет</div>}
-
-
-                            {/* <MyButton text={'Предпросмотр'} backgroundColor={'rgb(225, 225, 225)'} toggle={"modal"} target={"#previewModal"}/>
-                            {data ? <div className={classes.answers__wrapper__body__item}></div> */}
-                            {/* {data ? 
-                                data.map((item, i) => 
-                                    <div className={classes.answers__wrapper__body__item} key={i}>
-                                        <div className={classes.answers__wrapper__body__item__question}>
-                                            <p className={classes.answers__wrapper__body__item__question__text}>{i + 1}) {item.question.question}</p>
-                                            <p className={classes.item__question__comment}>{item.question.comment}</p>
-                                        </div>
-                                        <div className={classes.answers__wrapper__body__item__answer}>
-                                            <p className={classes.answers__wrapper__body__item__question__text}>Ответ: {item.answers.answer}</p>
-                                        </div>
-                                    </div>
-                                )
-                            : <div>Ответов нет</div>} */}
-                        </div>
-                        
+                            : 
+                            <div className={classes.loading__wrapper}>
+                                <div class="spinner-border text-dark" className={classes.loading__wrapper__body} role="status">
+                                    <span class="visually-hidden">Загрузка...</span>
+                                </div>
+                            </div>}
+                        </div>                        
                     </div>
                 </div>
             </div>

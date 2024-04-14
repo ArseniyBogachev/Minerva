@@ -28,7 +28,7 @@ const App = () => {
         {id: 4, text: 'Множественный выбор', typeTag: InputMultipleRadio},
         {id: 5, text: 'Выпадающий список', typeTag: DropDownList},
         {id: 6, text: 'Да/Нет', typeTag: YesNo},
-        {id: 7, text: 'Файл', typeTag: InputFile},
+        // {id: 7, text: 'Файл', typeTag: InputFile},
         {id: 8, text: 'Дата', typeTag: InputDate}
     ]);
 
@@ -38,15 +38,13 @@ const App = () => {
     useEffect(() => {
         async function verifyUser() {
             const response = await verifyUserApi(cookies.token);
-            console.log("app", user)
 
-            if (response) {
-                if (response.status === 200) {
-                    setUser(response.data);
-                }
-                else {
-                    console.log(response)
-                }
+            if (response.status === 200) {
+                setUser(response.data);
+                globalRender(window.location.pathname, response.data, navigate);
+            }
+            else {
+                globalRender(window.location.pathname, false, navigate);
             }
         }
 

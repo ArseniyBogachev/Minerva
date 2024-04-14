@@ -4,10 +4,6 @@ import classes from "../assets/styles/components/navbar.module.scss";
 import { verifyUserApi } from "../hooks/api/enterAccountApi";
 
 const NavBar = ({navigate, auth, setAuth}) => {
-    useEffect(() => {
-        console.log("nav", auth)
-    })
-
     return (
         <div className={classes.main}>
             <div className={classes.wrapper}>

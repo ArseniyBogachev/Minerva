@@ -19,11 +19,9 @@ const ViewForm = () => {
     const [cookies, setCookies, __] = useCookies(["user"]);
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
-    // const [title, setTitle] = useState("");
 
     useEffect(() => {
         async function getForm() {
-            // const responseForms = await listFormsApi(cookies.token);
             const responseBlocks = await listFormBlockByTokenApi(cookies.token, formId);
 
             if (responseBlocks.status === 200 && responseBlocks.data) {
@@ -33,10 +31,8 @@ const ViewForm = () => {
                 setAnswers(listBlocks.map(item => (
                     {id: item.id, answer: []}
                 )))
-                // setTitle(responseForms.data.find(item => item.id === formId).title)
             }
             else {
-                // console.log(responseForms)
                 console.log(responseBlocks)
             }
         };
@@ -45,6 +41,7 @@ const ViewForm = () => {
     }, []);
 
     function updateAnswersForm(value, id) {
+        console.log(value)
         setAnswers(
             answers.map((item, i) => {
                 if (id === i) {
@@ -56,8 +53,8 @@ const ViewForm = () => {
     };
 
     async function saveAnswers() {
+        console.log(answers)
         const response = await saveAnswersApi(cookies.token, formId, answers);
-        console.log(response)
 
         if (response.status === 200) {
             setAnswersList([...answersList, {

@@ -31,4 +31,22 @@ function responseDataToListBlock(data) {
     return result.sort((itemOne, itemTwo) => itemOne.order - itemTwo.order)
 };
 
-export { responseDataToListBlock }
+function dateTimeParse(date) {
+    let newDate = "";
+
+    for (let symbol of date) {
+        if (symbol === "T") {
+            newDate += " ";
+        }
+        else if (symbol === ".") {
+            break;
+        }
+        else {
+            newDate += symbol;
+        }
+    }
+
+    return newDate
+}
+
+export { responseDataToListBlock, dateTimeParse }

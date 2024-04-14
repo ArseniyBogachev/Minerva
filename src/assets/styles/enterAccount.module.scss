@@ -28,7 +28,6 @@
 .content {
     width: 100%;
     height: 100%;
-    // box-shadow: 0 3px 5px 1px rgb(200, 200, 200);
     border: 1px solid rgb(220, 220, 220);
     border-top: none;
     &__wrapper {
@@ -58,6 +57,15 @@
                 display: flex;
                 justify-content: space-around;
                 flex-direction: column;
+                position: relative;
+                &__error {
+                    position: absolute;
+                    font-size: 13px;
+                    font-family: "Montserrat", sans-serif;
+                    top: 0;
+                    left: 10px;
+                    color: rgb(224, 75, 75);
+                }
             }
             &__footer {
                 width: 100%;
@@ -87,7 +95,15 @@
                 justify-content: space-around;
                 flex-direction: column;
                 padding-bottom: 5px;
-                
+                position: relative;
+                &__error {
+                    position: absolute;
+                    font-size: 13px;
+                    font-family: "Montserrat", sans-serif;
+                    top: 0;
+                    left: 10px;
+                    color: rgb(224, 75, 75);
+                }
                 &__fio {
                     height: 15%;
                     display: flex;

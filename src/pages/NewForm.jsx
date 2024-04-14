@@ -118,13 +118,6 @@ const NewForm = () => {
         else {
             console.log(response)
         }
-
-        // setListBlock(listBlock.map(item => {
-        //     if (item.id === stateModal) {
-        //         item = data
-        //     }
-        //     return item
-        // }))
      
         cleanStates();
     };

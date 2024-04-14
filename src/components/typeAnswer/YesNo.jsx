@@ -11,8 +11,8 @@ const YesNo = ({postfix, optionAnswer, answers, updateAnswersForm}) => {
                     name={`YesOrNo_${postfix}`} 
                     id="choiceYes"
                     value="1" 
-                    checked={answers ? answers[postfix].answer === "1" : false}
-                    onChange={updateAnswersForm ? () => updateAnswersForm("1", postfix) : () => {}}
+                    checked={answers ? answers[postfix].answer === "Да" : false}
+                    onChange={updateAnswersForm ? () => updateAnswersForm("Да", postfix) : () => {}}
                 />
                 <label class="form-check-label" for="choiceYes">Да</label>
             </div>
@@ -23,8 +23,8 @@ const YesNo = ({postfix, optionAnswer, answers, updateAnswersForm}) => {
                     name={`YesOrNo_${postfix}`} 
                     id="choiceNo"
                     value="2" 
-                    checked={answers ? answers[postfix].answer === "2" : false}
-                    onChange={updateAnswersForm ? () => updateAnswersForm("2", postfix) : () => {}}
+                    checked={answers ? answers[postfix].answer === "Нет" : false}
+                    onChange={updateAnswersForm ? () => updateAnswersForm("Нет", postfix) : () => {}}
                 />
                 <label class="form-check-label" for="choiceNo">Нет</label>
             </div>
