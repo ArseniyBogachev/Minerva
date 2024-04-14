@@ -5,19 +5,23 @@ import classes from "../assets/styles/enterAccount.module.scss";
 import MyInput from "../components/MyInput.jsx";
 import MyButton from "../components/MyButton.jsx";
 import { UserData } from "../context";
-import { logIn, completeRegistration, verifyUserApi } from "../hooks/api/enterAccountApi.js";
+import {
+  logIn,
+  completeRegistration,
+  verifyUserApi,
+} from "../hooks/api/enterAccountApi.js";
 
 const EnterAccount = () => {
-    const [enter, setEnter] = useState("login");
-    const navigate = useNavigate();
+  const [enter, setEnter] = useState("login");
+  const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [login, setLogin] = useState("");
-    const [surname, setSurname] = useState("");
-    const [patronymic, setPatronymic] = useState("");
-    const [password, setPassword] = useState("");
-    const [repiedPassword, setRepiedPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [login, setLogin] = useState("");
+  const [surname, setSurname] = useState("");
+  const [patronymic, setPatronymic] = useState("");
+  const [password, setPassword] = useState("");
+  const [repiedPassword, setRepiedPassword] = useState("");
 
     const {user, setUser} = useContext(UserData);
     const [cookies, setCookie, removeCookie] = useCookies(["user"]);
@@ -25,27 +29,27 @@ const EnterAccount = () => {
     const [loginError, setLoginError] = useState(false);
     const [regsterError, setRegsterError] = useState(false);
 
-    function cleanState() {
-        setEmail("");
-        setPhone("");
-        setLogin("");
-        setSurname("");
-        setPatronymic("");
-        setPassword("");
-        setRepiedPassword("");
-    };
+  function cleanState() {
+    setEmail("");
+    setPhone("");
+    setLogin("");
+    setSurname("");
+    setPatronymic("");
+    setPassword("");
+    setRepiedPassword("");
+  }
 
-    function selectTag(tag) {
-        setEnter(tag);
-        cleanState();
-    };
+  function selectTag(tag) {
+    setEnter(tag);
+    cleanState();
+  }
 
-    async function createUser() {
-        const response = await completeRegistration({
-            login: login,
-            password: password,
-            repiedPassword: repiedPassword
-        });
+  async function createUser() {
+    const response = await completeRegistration({
+      login: login,
+      password: password,
+      repiedPassword: repiedPassword,
+    });
 
         if (response.status === 200) {
             const responseMe = await verifyUserApi(response.data.token)
@@ -59,8 +63,8 @@ const EnterAccount = () => {
         }
     };
 
-    async function logInToAccount() {
-        const response = await logIn(login, password)
+  async function logInToAccount() {
+    const response = await logIn(login, password);
 
         if (response.status === 200) {
             setCookie("token", response.data.token);
@@ -133,14 +137,19 @@ const EnterAccount = () => {
                                 <MyInput type={'password'} placeholder={"Повторите пароль"} otherMainStyle={{width: "100%", height: "15%"}} otherInputStyle={{width: "100%"}} value={repiedPassword} change={setRepiedPassword}/>
                             </div> */}
                             <div className={classes.content__wrapper__register__footer}>
-                                <MyButton text={"Создать"} otherStyle={{height: "100%", width: "20%"}} click={() => createUser()}/>
+                                <MyButton
+                                    text={"Создать"}
+                                    otherStyle={{ height: "100%", width: "20%" }}
+                                    click={() => createUser()}
+                                />
                             </div>
-                        </div>}
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+        );
+    };
 
 export default EnterAccount;

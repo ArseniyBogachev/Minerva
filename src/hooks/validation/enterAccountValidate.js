@@ -1,14 +1,18 @@
-const constructorAnswerValidate = (state, messageReject = "Ошибка", messageResolve = undefined) => {
-    return state ? 
-        {
-            status: true, 
-            message: messageResolve
-        } :
-        {
-            status: false, 
-            message: messageReject
-        }
-}
+const constructorAnswerValidate = (
+  state,
+  messageReject = "Ошибка",
+  messageResolve = undefined
+) => {
+  return state
+    ? {
+        status: true,
+        message: messageResolve,
+      }
+    : {
+        status: false,
+        message: messageReject,
+      };
+};
 
 const totalRegisterValidate = (data) => {
     const listValidation = [
@@ -22,12 +26,12 @@ const totalRegisterValidate = (data) => {
         // constructorAnswerValidate(data.password >= 8, "Пароль должен иметь более 8 символов.")
     ]
 
-    for (let value of listValidation) {
-        if (!value.status) {
-            return value
-        }
+  for (let value of listValidation) {
+    if (!value.status) {
+      return value;
     }
-    return { status: true }
-}
+  }
+  return { status: true };
+};
 
-export { totalRegisterValidate, constructorAnswerValidate }
+export { totalRegisterValidate, constructorAnswerValidate };

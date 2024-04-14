@@ -26,7 +26,7 @@ const NavBar = ({navigate, auth, setAuth}) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default NavBar;
