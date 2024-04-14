@@ -38,6 +38,7 @@ const App = () => {
     useEffect(() => {
         async function verifyUser() {
             const response = await verifyUserApi(cookies.token);
+            console.log("app", user)
 
             if (response) {
                 if (response.status === 200) {

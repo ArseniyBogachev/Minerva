@@ -4,24 +4,9 @@ import classes from "../assets/styles/components/navbar.module.scss";
 import { verifyUserApi } from "../hooks/api/enterAccountApi";
 
 const NavBar = ({navigate, auth, setAuth}) => {
-    // const [cookies, _, __] = useCookies(["user"]);
-
-    // useEffect(() => {
-    //     async function verifyUser() {
-    //         const response = await verifyUserApi(cookies.token);
-
-    //         if (response) {
-    //             if (response.status === 200) {
-    //                 setAuth(response.data);
-    //             }
-    //             else {
-    //                 console.log(response)
-    //             }
-    //         }
-    //     }
-
-    //     verifyUser()
-    // }, []);
+    useEffect(() => {
+        console.log("nav", auth)
+    })
 
     return (
         <div className={classes.main}>
