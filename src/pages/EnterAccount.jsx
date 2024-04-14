@@ -49,18 +49,19 @@ const EnterAccount = () => {
     });
 
     if (response.status === 200) {
-      setUser({
-        email: email,
-        phone: phone,
-        login: login,
-        surname: surname,
-        patronymic: patronymic,
-        password: password,
-      });
+      //   setUser({
+      //     email: email,
+      //     phone: phone,
+      //     login: login,
+      //     surname: surname,
+      //     patronymic: patronymic,
+      //     password: password,
+      //   });
+      const responseMe = await verifyUserApi(response.data.token);
+      setUser(responseMe.data);
       setCookie("token", response.data.token);
       cleanState();
-      window.location.reload();
-      // navigate("/");
+      navigate("/");
     } else {
       console.log("Error");
     }
@@ -71,13 +72,10 @@ const EnterAccount = () => {
 
     if (response.status === 200) {
       setCookie("token", response.data.token);
+      const responseMe = await verifyUserApi(response.data.token);
+      setUser(responseMe.data);
       cleanState();
-      // setUser({
-      //     login: login
-      // })
-      window.location.reload();
-      // navigate("/")
-      // window.location.reload()
+      navigate("/");
     } else {
       console.log(response);
     }
